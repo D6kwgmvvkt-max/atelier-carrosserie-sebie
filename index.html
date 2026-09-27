@@ -29,11 +29,6 @@
       font-size: 28px;
     }
 
-    header p {
-      margin: 8px 0 0;
-      opacity: 0.8;
-    }
-
     main {
       padding: 20px;
       max-width: 600px;
@@ -48,62 +43,222 @@
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .card h2 {
-      margin-top: 0;
+    input, button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 12px;
+      font-size: 17px;
+    }
+
+    input {
+      border: 1px solid #ccc;
     }
 
     button {
-      width: 100%;
-      padding: 16px;
-      margin-top: 10px;
       border: 0;
-      border-radius: 12px;
-      font-size: 17px;
-      font-weight: 600;
       background: #111;
       color: white;
+      font-weight: 600;
     }
 
-    button:active {
-      transform: scale(0.98);
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .photos img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .vehicle {
+      border-top: 1px solid #ddd;
+      margin-top: 15px;
+      padding-top: 15px;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Atelier Carrosserie Sébie</h1>
-    <p>Gestion de l'atelier</p>
-  </header>
+<header>
+  <h1>Atelier Carrosserie Sébie</h1>
+  <p>Gestion de l'atelier</p>
+</header>
 
-  <main>
+<main>
 
-    <div class="card">
-      <h2>🚗 Véhicules</h2>
-      <p>Gérer les véhicules pris en charge par l'atelier.</p>
-      <button onclick="alert('Fonction Véhicules à venir')">
-        Gérer les véhicules
+  <div class="card">
+    <h2>🚗 Nouveau véhicule</h2>
+
+    <input
+      id="immatriculation"
+      type="text"
+      placeholder="Immatriculation"
+    >
+
+    <button onclick="ajouterVehicule()">
+      Ajouter le véhicule
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>📋 Véhicules</h2>
+    <div id="listeVehicules"></div>
+  </div>
+
+</main>
+
+<script>
+
+let vehicules = JSON.parse(
+  localStorage.getItem("vehicules") || "[]"
+);
+
+function sauvegarder() {
+  localStorage.setItem(
+    "vehicules",
+    JSON.stringify(vehicules)
+  );
+}
+
+function ajouterVehicule() {
+
+  const immatriculation =
+    document.getElementById("immatriculation").value.trim();
+
+  if (!immatriculation) {
+    alert("Indique l'immatriculation.");
+    return;
+  }
+
+  vehicules.push({
+    immatriculation: immatriculation,
+    photos: []
+  });
+
+  sauvegarder();
+
+  document.getElementById("immatriculation").value = "";
+
+  afficherVehicules();
+}
+
+function ajouterPhoto(index, input) {
+
+  const fichier = input.files[0];
+
+  if (!fichier) return;
+
+  const lecteur = new FileReader();
+
+  lecteur.onload = function(e) {
+
+    vehicules[index].photos.push(e.target.result);
+
+    sauvegarder();
+    afficherVehicules();
+  };
+
+  lecteur.readAsDataURL(fichier);
+}
+
+function supprimerPhoto(vehiculeIndex, photoIndex) {
+
+  vehicules[vehiculeIndex].photos.splice(
+    photoIndex,
+    1
+  );
+
+  sauvegarder();
+  afficherVehicules();
+}
+
+function partagerPhotos(index) {
+
+  const photos = vehicules[index].photos;
+
+  if (!photos.length) {
+    alert("Aucune photo à partager.");
+    return;
+  }
+
+  alert(
+    "Les photos sont enregistrées dans ce dossier. " +
+    "Nous ajouterons ensuite le bouton de partage vers Mail."
+  );
+}
+
+function afficherVehicules() {
+
+  const liste =
+    document.getElementById("listeVehicules");
+
+  liste.innerHTML = "";
+
+  if (!vehicules.length) {
+
+    liste.innerHTML =
+      "<p>Aucun véhicule enregistré.</p>";
+
+    return;
+  }
+
+  vehicules.forEach((vehicule, index) => {
+
+    const bloc =
+      document.createElement("div");
+
+    bloc.className = "vehicle";
+
+    let html = `
+      <h3>🚘 ${vehicule.immatriculation}</h3>
+
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onchange="ajouterPhoto(${index}, this)"
+      >
+
+      <button onclick="partagerPhotos(${index})">
+        📧 Partager les photos
       </button>
-    </div>
 
-    <div class="card">
-      <h2>📋 Dossiers</h2>
-      <p>Créer et suivre les dossiers clients.</p>
-      <button onclick="alert('Fonction Dossiers à venir')">
-        Voir les dossiers
-      </button>
-    </div>
+      <div class="photos">
+    `;
 
-    <div class="card">
-      <h2>👤 Clients</h2>
-      <p>Retrouver les informations des clients.</p>
-      <button onclick="alert('Fonction Clients à venir')">
-        Gérer les clients
-      </button>
-    </div>
+    vehicule.photos.forEach((photo, photoIndex) => {
 
-  </main>
+      html += `
+        <div>
+          <img src="${photo}">
+          <button
+            onclick="supprimerPhoto(${index}, ${photoIndex})"
+          >
+            🗑️ Supprimer
+          </button>
+        </div>
+      `;
+
+    });
+
+    html += "</div>";
+
+    bloc.innerHTML = html;
+
+    liste.appendChild(bloc);
+  });
+}
+
+afficherVehicules();
+
+</script>
 
 </body>
 </html>
