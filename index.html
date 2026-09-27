@@ -1,262 +1,365 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Atelier Carrosserie Sébie</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atelier Carrosserie Sébie</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f5f7;
-      color: #222;
-    }
-
-    header {
-      background: #111;
-      color: white;
-      padding: 25px 20px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    main {
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    input, button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 10px;
-      border-radius: 12px;
-      font-size: 17px;
-    }
-
-    input {
-      border: 1px solid #ccc;
-    }
-
-    button {
-      border: 0;
-      background: #111;
-      color: white;
-      font-weight: 600;
-    }
-
-    .photos {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .photos img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-
-    .vehicle {
-      border-top: 1px solid #ddd;
-      margin-top: 15px;
-      padding-top: 15px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f4f5f7;color:#222
+}
+header{
+  background:#111;color:white;text-align:center;padding:22px 15px
+}
+header h1{margin:0;font-size:26px}
+main{max-width:600px;margin:auto;padding:18px}
+.card{
+  background:white;border-radius:16px;padding:18px;margin-bottom:16px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08)
+}
+button,input{
+  width:100%;padding:15px;margin-top:10px;border-radius:12px;
+  font-size:17px
+}
+button{
+  border:0;background:#111;color:white;font-weight:600
+}
+input{border:1px solid #ccc}
+.photo{
+  width:100%;border-radius:12px;margin-top:10px
+}
+.small{font-size:14px;color:#666}
+.vehicle{
+  border-top:1px solid #ddd;padding-top:15px;margin-top:15px
+}
+.loading{
+  display:none;text-align:center;padding:15px
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <h1>Atelier Carrosserie Sébie</h1>
-  <p>Gestion de l'atelier</p>
+  <p>Gestion des véhicules</p>
 </header>
 
 <main>
 
-  <div class="card">
-    <h2>🚗 Nouveau véhicule</h2>
+<div class="card">
+  <h2>📷 Scanner l'immatriculation</h2>
 
-    <input
-      id="immatriculation"
-      type="text"
-      placeholder="Immatriculation"
-    >
+  <input
+    id="plaquePhoto"
+    type="file"
+    accept="image/*"
+    capture="environment"
+  >
 
-    <button onclick="ajouterVehicule()">
-      Ajouter le véhicule
-    </button>
+  <button onclick="scannerPlaque()">
+    🔎 Lire l'immatriculation
+  </button>
+
+  <div id="chargement" class="loading">
+    Lecture de la plaque en cours…
   </div>
 
-  <div class="card">
-    <h2>📋 Véhicules</h2>
-    <div id="listeVehicules"></div>
-  </div>
+  <input
+    id="immatriculation"
+    type="text"
+    placeholder="Immatriculation"
+  >
+
+  <button onclick="creerVehicule()">
+    🚗 Créer le dossier véhicule
+  </button>
+</div>
+
+<div class="card">
+  <h2>🚗 Mes véhicules</h2>
+  <div id="liste"></div>
+</div>
 
 </main>
 
 <script>
 
-let vehicules = JSON.parse(
-  localStorage.getItem("vehicules") || "[]"
-);
+let vehicules =
+  JSON.parse(localStorage.getItem("atelierVehicules") || "[]");
 
-function sauvegarder() {
+function sauvegarder(){
   localStorage.setItem(
-    "vehicules",
+    "atelierVehicules",
     JSON.stringify(vehicules)
   );
 }
 
-function ajouterVehicule() {
+function nettoyerPlaque(texte){
 
-  const immatriculation =
-    document.getElementById("immatriculation").value.trim();
+  return texte
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g,"")
+    .replace(/^.*?(?=[A-Z]{2}[0-9]{3}[A-Z]{2}$)/,"");
+}
 
-  if (!immatriculation) {
+async function scannerPlaque(){
+
+  const fichier =
+    document.getElementById("plaquePhoto").files[0];
+
+  if(!fichier){
+    alert("Prends d'abord une photo de l'immatriculation.");
+    return;
+  }
+
+  const chargement =
+    document.getElementById("chargement");
+
+  chargement.style.display="block";
+
+  try{
+
+    const resultat = await Tesseract.recognize(
+      fichier,
+      "eng",
+      {
+        logger: m => {
+          if(m.status === "recognizing text"){
+            chargement.textContent =
+              "Lecture : " +
+              Math.round(m.progress*100) + "%";
+          }
+        }
+      }
+    );
+
+    let texte = resultat.data.text;
+
+    let candidats =
+      texte.toUpperCase()
+      .split(/\s+/)
+      .map(nettoyerPlaque)
+      .filter(x => x.length >= 6);
+
+    let plaque =
+      candidats.find(x => /^[A-Z]{2}[0-9]{3}[A-Z]{2}$/.test(x));
+
+    if(!plaque){
+      plaque = candidats[0] || "";
+    }
+
+    document.getElementById("immatriculation").value =
+      plaque;
+
+    chargement.textContent =
+      plaque
+      ? "Plaque détectée : " + plaque
+      : "Plaque non détectée. Vérifie la photo.";
+
+  }catch(e){
+
+    alert(
+      "La lecture automatique a échoué. " +
+      "Tu peux saisir l'immatriculation manuellement."
+    );
+
+  }finally{
+
+    setTimeout(()=>{
+      chargement.style.display="none";
+    },3000);
+
+  }
+}
+
+function creerVehicule(){
+
+  const plaque =
+    document.getElementById("immatriculation")
+    .value.trim().toUpperCase();
+
+  if(!plaque){
     alert("Indique l'immatriculation.");
     return;
   }
 
   vehicules.push({
-    immatriculation: immatriculation,
-    photos: []
+    id:Date.now(),
+    immatriculation:plaque,
+    photos:[]
   });
 
   sauvegarder();
 
-  document.getElementById("immatriculation").value = "";
+  document.getElementById("immatriculation").value="";
+  document.getElementById("plaquePhoto").value="";
 
-  afficherVehicules();
+  afficher();
 }
 
-function ajouterPhoto(index, input) {
+function ajouterPhoto(index,input){
 
-  const fichier = input.files[0];
+  const fichier=input.files[0];
 
-  if (!fichier) return;
+  if(!fichier)return;
 
-  const lecteur = new FileReader();
+  const lecteur=new FileReader();
 
-  lecteur.onload = function(e) {
+  lecteur.onload=function(e){
 
-    vehicules[index].photos.push(e.target.result);
+    vehicules[index].photos.push({
+      nom:"photo-"+Date.now()+".jpg",
+      data:e.target.result
+    });
 
     sauvegarder();
-    afficherVehicules();
+    afficher();
   };
 
   lecteur.readAsDataURL(fichier);
 }
 
-function supprimerPhoto(vehiculeIndex, photoIndex) {
+function supprimerPhoto(v,p){
 
-  vehicules[vehiculeIndex].photos.splice(
-    photoIndex,
-    1
-  );
+  vehicules[v].photos.splice(p,1);
 
   sauvegarder();
-  afficherVehicules();
+  afficher();
 }
 
-function partagerPhotos(index) {
+async function partagerPhotos(index){
 
-  const photos = vehicules[index].photos;
+  const vehicule=vehicules[index];
 
-  if (!photos.length) {
-    alert("Aucune photo à partager.");
+  if(!vehicule.photos.length){
+    alert("Aucune photo dans ce dossier.");
     return;
   }
 
-  alert(
-    "Les photos sont enregistrées dans ce dossier. " +
-    "Nous ajouterons ensuite le bouton de partage vers Mail."
-  );
+  const fichiers=[];
+
+  for(let i=0;i<vehicule.photos.length;i++){
+
+    const photo=vehicule.photos[i];
+
+    const reponse=await fetch(photo.data);
+    const blob=await reponse.blob();
+
+    fichiers.push(
+      new File(
+        [blob],
+        photo.nom,
+        {type:"image/jpeg"}
+      )
+    );
+  }
+
+  if(
+    navigator.canShare &&
+    navigator.canShare({files:fichiers})
+  ){
+
+    await navigator.share({
+      title:
+        "Dossier véhicule " +
+        vehicule.immatriculation,
+
+      text:
+        "Photos du véhicule " +
+        vehicule.immatriculation,
+
+      files:fichiers
+    });
+
+  }else{
+
+    alert(
+      "Le partage de fichiers n'est pas disponible " +
+      "dans ce navigateur."
+    );
+  }
 }
 
-function afficherVehicules() {
+function afficher(){
 
-  const liste =
-    document.getElementById("listeVehicules");
+  const liste=document.getElementById("liste");
 
-  liste.innerHTML = "";
+  if(!vehicules.length){
 
-  if (!vehicules.length) {
-
-    liste.innerHTML =
+    liste.innerHTML=
       "<p>Aucun véhicule enregistré.</p>";
 
     return;
   }
 
-  vehicules.forEach((vehicule, index) => {
+  liste.innerHTML="";
 
-    const bloc =
-      document.createElement("div");
+  vehicules.forEach((v,index)=>{
 
-    bloc.className = "vehicle";
+    const bloc=document.createElement("div");
 
-    let html = `
-      <h3>🚘 ${vehicule.immatriculation}</h3>
+    bloc.className="vehicle";
+
+    let html=`
+      <h3>🚘 ${v.immatriculation}</h3>
 
       <input
         type="file"
         accept="image/*"
         capture="environment"
-        onchange="ajouterPhoto(${index}, this)"
+        onchange="ajouterPhoto(${index},this)"
       >
 
       <button onclick="partagerPhotos(${index})">
-        📧 Partager les photos
+        📧 Envoyer / partager les photos
       </button>
-
-      <div class="photos">
     `;
 
-    vehicule.photos.forEach((photo, photoIndex) => {
+    if(v.photos.length){
+
+      html += `<p class="small">
+        ${v.photos.length} photo(s)
+      </p>`;
+
+      v.photos.forEach((photo,p)=>{
+
+        html += `
+          <img
+            class="photo"
+            src="${photo.data}"
+          >
+
+          <button
+            onclick="supprimerPhoto(${index},${p})"
+          >
+            🗑️ Supprimer cette photo
+          </button>
+        `;
+      });
+
+    }else{
 
       html += `
-        <div>
-          <img src="${photo}">
-          <button
-            onclick="supprimerPhoto(${index}, ${photoIndex})"
-          >
-            🗑️ Supprimer
-          </button>
-        </div>
+        <p class="small">
+          Aucune photo pour ce véhicule.
+        </p>
       `;
+    }
 
-    });
-
-    html += "</div>";
-
-    bloc.innerHTML = html;
-
+    bloc.innerHTML=html;
     liste.appendChild(bloc);
   });
 }
 
-afficherVehicules();
+afficher();
 
 </script>
 
