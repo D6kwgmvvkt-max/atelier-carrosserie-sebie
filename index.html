@@ -58,17 +58,6 @@ input[type=email]{
   margin-bottom:10px
 }
 
-textarea{
-  width:100%;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  font-size:16px;
-  resize:vertical;
-  min-height:75px;
-  font-family:inherit
-}
-
 button{
   border:none;
   border-radius:10px;
@@ -262,17 +251,28 @@ button{
 <div class="container">
 
 <div class="card">
+
 <h2>➕ Nouveau véhicule</h2>
 
 <div class="info">
-📷 Tu peux scanner directement l'immatriculation avec l'appareil photo.
+
+📷 Tu peux scanner directement l'immatriculation.
+
 <br><br>
-🎙️ Tu peux aussi <strong>dicter l'immatriculation</strong>.
+
+🎙️ Tu peux aussi la dicter.
+
 <br><br>
-Exemple : <strong>AB 123 CD → AB-123-CD</strong>
+
+Exemple :
+<strong>AB 123 CD → AB-123-CD</strong>
+
 </div>
 
-<button class="scanner" onclick="ouvrirScanner()">
+<button
+  class="scanner"
+  onclick="ouvrirScanner()"
+>
 📷 Scanner l'immatriculation
 </button>
 
@@ -285,7 +285,10 @@ Exemple : <strong>AB 123 CD → AB-123-CD</strong>
   onchange="scannerPhoto(this)"
 >
 
-<div id="scannerStatus" class="status"></div>
+<div
+  id="scannerStatus"
+  class="status"
+></div>
 
 <input
   id="immatriculation"
@@ -306,15 +309,23 @@ Exemple : <strong>AB 123 CD → AB-123-CD</strong>
 🎙️ Dicter l'immatriculation
 </button>
 
-<div id="voiceStatus" class="status"></div>
+<div
+  id="voiceStatus"
+  class="status"
+></div>
 
-<button class="primary" onclick="ajouterVehicule()">
+<button
+  class="primary"
+  onclick="ajouterVehicule()"
+>
 ➕ Ajouter le véhicule
 </button>
+
 </div>
 
 
 <div class="card">
+
 <h2>📧 Adresses e-mail</h2>
 
 <input
@@ -324,17 +335,24 @@ Exemple : <strong>AB 123 CD → AB-123-CD</strong>
   autocomplete="email"
 >
 
-<button class="primary" onclick="ajouterEmail()">
+<button
+  class="primary"
+  onclick="ajouterEmail()"
+>
 ➕ Ajouter une adresse
 </button>
 
 <div id="listeEmails"></div>
+
 </div>
 
 
 <div class="card">
+
 <h2>🚘 Mes véhicules</h2>
+
 <div id="listeVehicules"></div>
+
 </div>
 
 </div>
@@ -347,38 +365,42 @@ Exemple : <strong>AB 123 CD → AB-123-CD</strong>
 ========================================================= */
 
 let vehicules=JSON.parse(
- localStorage.getItem("atelierCarrosserieVehicules")||"[]"
+  localStorage.getItem(
+    "atelierCarrosserieVehicules"
+  ) || "[]"
 );
 
 let emails=JSON.parse(
- localStorage.getItem("atelierCarrosserieEmails")||"[]"
+  localStorage.getItem(
+    "atelierCarrosserieEmails"
+  ) || "[]"
 );
 
 
 /* =========================================================
-   MIGRATION DES ANCIENNES PHOTOS
-   Les anciennes photos étaient de simples chaînes.
-   Elles deviennent maintenant :
-   { image: "...", commentaire: "..." }
+   MIGRATION ANCIENNES PHOTOS
 ========================================================= */
 
 vehicules.forEach(vehicle=>{
 
- if(!Array.isArray(vehicle.photos)){
-   vehicle.photos=[];
- }
+  if(!Array.isArray(vehicle.photos)){
+    vehicle.photos=[];
+  }
 
- vehicle.photos=vehicle.photos.map(photo=>{
+  vehicle.photos=vehicle.photos.map(photo=>{
 
-   if(typeof photo==="string"){
-     return {
-       image:photo,
-       commentaire:""
-     };
-   }
+    if(typeof photo==="string"){
 
-   return photo;
- });
+      return {
+        image:photo,
+        commentaire:""
+      };
+
+    }
+
+    return photo;
+
+  });
 
 });
 
@@ -386,72 +408,116 @@ sauvegarderVehicules();
 
 
 /* =========================================================
-   SCANNER IMMATRICULATION
+   SCANNER
 ========================================================= */
 
 function ouvrirScanner(){
- document.getElementById("scannerImmatriculation").click();
+
+  document
+    .getElementById(
+      "scannerImmatriculation"
+    )
+    .click();
+
 }
 
 
 async function scannerPhoto(input){
 
- const fichier=input.files[0];
- if(!fichier)return;
+  const fichier=input.files[0];
 
- const status=document.getElementById("scannerStatus");
+  if(!fichier)return;
 
- status.style.display="block";
- status.style.background="#fff3cd";
- status.textContent="📷 Analyse de la photo en cours…";
+  const status=
+    document.getElementById(
+      "scannerStatus"
+    );
 
- try{
+  status.style.display="block";
 
-   const image=await chargerImage(fichier);
-   const images=creerImagesPourOCR(image);
+  status.style.background="#fff3cd";
 
-   let resultat="";
+  status.textContent=
+    "📷 Analyse de la photo en cours…";
 
-   for(let i=0;i<images.length;i++){
+  try{
 
-     status.textContent=
-       "🔎 Reconnaissance de l'immatriculation… "+
-       (i+1)+"/"+images.length;
+    const image=
+      await chargerImage(fichier);
 
-     const texte=await reconnaitreTexte(images[i]);
-     const plaque=extraireImmatriculation(texte);
+    const images=
+      creerImagesPourOCR(image);
 
-     if(plaque){
-       resultat=plaque;
-       break;
-     }
-   }
+    let resultat="";
 
-   if(resultat){
+    for(
+      let i=0;
+      i<images.length;
+      i++
+    ){
 
-     document.getElementById("immatriculation").value=resultat;
+      status.textContent=
+        "🔎 Reconnaissance… "+
+        (i+1)+"/"+
+        images.length;
 
-     status.style.background="#d4edda";
-     status.textContent=
-       "✅ Immatriculation reconnue : "+resultat;
+      const texte=
+        await reconnaitreTexte(
+          images[i]
+        );
 
-   }else{
+      const plaque=
+        extraireImmatriculation(
+          texte
+        );
 
-     status.style.background="#f8d7da";
-     status.textContent=
-       "❌ Immatriculation non reconnue. Tu peux la dicter avec le bouton 🎙️.";
-   }
+      if(plaque){
 
- }catch(erreur){
+        resultat=plaque;
 
-   console.error(erreur);
+        break;
+      }
 
-   status.style.background="#f8d7da";
-   status.textContent=
-     "❌ Impossible de lire l'immatriculation. Tu peux la dicter avec le bouton 🎙️.";
- }
+    }
 
- input.value="";
+    if(resultat){
+
+      document.getElementById(
+        "immatriculation"
+      ).value=resultat;
+
+      status.style.background=
+        "#d4edda";
+
+      status.textContent=
+        "✅ Immatriculation reconnue : "+
+        resultat;
+
+    }else{
+
+      status.style.background=
+        "#f8d7da";
+
+      status.textContent=
+        "❌ Plaque non reconnue. "+
+        "Tu peux la dicter avec le bouton 🎙️.";
+
+    }
+
+  }catch(erreur){
+
+    console.error(erreur);
+
+    status.style.background=
+      "#f8d7da";
+
+    status.textContent=
+      "❌ Impossible de lire la plaque. "+
+      "Tu peux la dicter.";
+
+  }
+
+  input.value="";
 }
 
 
@@ -461,300 +527,412 @@ async function scannerPhoto(input){
 
 function dicterImmatriculation(){
 
- if(!("webkitSpeechRecognition" in window) &&
-    !("SpeechRecognition" in window)){
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-   alert(
-     "La dictée vocale n'est pas disponible dans ce navigateur. "+
-     "Tu peux utiliser le micro du clavier de l'iPhone."
-   );
+  if(!SpeechRecognition){
 
-   return;
- }
+    alert(
+      "La dictée vocale n'est pas disponible ici. "+
+      "Tu peux utiliser le micro du clavier de l'iPhone."
+    );
 
- const SpeechRecognition=
-   window.SpeechRecognition ||
-   window.webkitSpeechRecognition;
+    return;
+  }
 
- const recognition=new SpeechRecognition();
+  const recognition=
+    new SpeechRecognition();
 
- recognition.lang="fr-FR";
- recognition.continuous=false;
- recognition.interimResults=false;
- recognition.maxAlternatives=5;
+  recognition.lang="fr-FR";
 
- const bouton=document.getElementById("boutonVoixImmat");
- const status=document.getElementById("voiceStatus");
+  recognition.continuous=false;
 
- bouton.classList.add("recording");
- bouton.textContent="🔴 Écoute en cours…";
+  recognition.interimResults=false;
 
- status.style.display="block";
- status.style.background="#fff3cd";
- status.textContent="🎙️ Dis l'immatriculation…";
+  recognition.maxAlternatives=10;
 
- recognition.onresult=function(event){
+  const bouton=
+    document.getElementById(
+      "boutonVoixImmat"
+    );
 
-   let meilleurTexte="";
+  const status=
+    document.getElementById(
+      "voiceStatus"
+    );
 
-   for(let i=0;i<event.results[0].length;i++){
+  bouton.classList.add(
+    "recording"
+  );
 
-     const texte=event.results[0][i].transcript;
+  bouton.textContent=
+    "🔴 Écoute en cours…";
 
-     if(texte){
-       meilleurTexte=texte;
-       break;
-     }
-   }
+  status.style.display="block";
 
-   const plaque=convertirDicteeEnImmatriculation(meilleurTexte);
+  status.style.background=
+    "#fff3cd";
 
-   if(plaque){
-
-     document.getElementById("immatriculation").value=plaque;
-
-     status.style.background="#d4edda";
-     status.textContent=
-       "✅ Immatriculation : "+plaque;
-
-   }else{
-
-     status.style.background="#f8d7da";
-     status.textContent=
-       "❌ Je n'ai pas reconnu une immatriculation à 7 caractères. Réessaie.";
-   }
- };
+  status.textContent=
+    "🎙️ Dis l'immatriculation…";
 
 
- recognition.onerror=function(event){
+  recognition.onresult=
+    function(event){
 
-   console.log("Erreur reconnaissance vocale :",event);
+      let textes=[];
 
-   status.style.background="#f8d7da";
-   status.textContent=
-     "❌ Je n'ai pas compris. Appuie de nouveau sur le micro.";
- };
+      for(
+        let i=0;
+        i<event.results[0].length;
+        i++
+      ){
+
+        const texte=
+          event.results[0][i]
+            .transcript;
+
+        if(texte){
+
+          textes.push(texte);
+        }
+
+      }
+
+      let plaque=null;
+
+      for(
+        const texte of textes
+      ){
+
+        plaque=
+          convertirDicteeEnImmatriculation(
+            texte
+          );
+
+        if(plaque)break;
+
+      }
 
 
- recognition.onend=function(){
+      if(plaque){
 
-   bouton.classList.remove("recording");
-   bouton.textContent="🎙️ Dicter l'immatriculation";
- };
+        document.getElementById(
+          "immatriculation"
+        ).value=plaque;
+
+        status.style.background=
+          "#d4edda";
+
+        status.textContent=
+          "✅ Immatriculation reconnue : "+
+          plaque;
+
+      }else{
+
+        status.style.background=
+          "#f8d7da";
+
+        status.textContent=
+          "❌ Je n'ai pas reconnu la plaque. "+
+          "Essaie en disant lentement : "+
+          "« AB 123 CD »";
+
+      }
+
+    };
 
 
- recognition.start();
+  recognition.onerror=
+    function(event){
+
+      console.log(
+        "Erreur dictée :",
+        event.error
+      );
+
+      status.style.background=
+        "#f8d7da";
+
+      status.textContent=
+        "❌ La dictée n'a pas été comprise. "+
+        "Réessaie.";
+
+    };
+
+
+  recognition.onend=
+    function(){
+
+      bouton.classList.remove(
+        "recording"
+      );
+
+      bouton.textContent=
+        "🎙️ Dicter l'immatriculation";
+
+    };
+
+
+  try{
+
+    recognition.start();
+
+  }catch(erreur){
+
+    console.log(erreur);
+
+  }
+
 }
 
 
 /* =========================================================
-   TRANSFORMATION DICTÉE → IMMATRICULATION
+   CONVERSION DICTÉE
 ========================================================= */
 
-function convertirDicteeEnImmatriculation(texte){
+function convertirDicteeEnImmatriculation(
+  texte
+){
 
- texte=texte
-   .toUpperCase()
-   .normalize("NFD")
-   .replace(/[\u0300-\u036f]/g,"");
+  if(!texte)return null;
 
-
- /* Chiffres écrits en lettres */
-
- const chiffres={
-   "ZERO":"0",
-   "UN":"1",
-   "UNE":"1",
-   "DEUX":"2",
-   "TROIS":"3",
-   "QUATRE":"4",
-   "CINQ":"5",
-   "SIX":"6",
-   "SEPT":"7",
-   "HUIT":"8",
-   "NEUF":"9"
- };
-
- Object.keys(chiffres).forEach(mot=>{
-
-   const regex=new RegExp("\\b"+mot+"\\b","g");
-
-   texte=texte.replace(
-     regex,
-     chiffres[mot]
-   );
- });
+  let t=texte
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .trim();
 
 
- /* On enlève les mots courants ajoutés par la dictée */
+  const nombres={
 
- texte=texte
-   .replace(/\bIMMATRICULATION\b/g,"")
-   .replace(/\bPLAQUE\b/g,"")
-   .replace(/\bNUMERO\b/g,"")
-   .replace(/\bNUMÉRO\b/g,"");
+    "ZERO":"0",
+    "UN":"1",
+    "UNE":"1",
+    "DEUX":"2",
+    "TROIS":"3",
+    "QUATRE":"4",
+    "CINQ":"5",
+    "SIX":"6",
+    "SEPT":"7",
+    "HUIT":"8",
+    "NEUF":"9",
+    "DIX":"10",
+    "ONZE":"11",
+    "DOUZE":"12",
+    "TREIZE":"13",
+    "QUATORZE":"14",
+    "QUINZE":"15",
+    "SEIZE":"16",
+    "DIX-SEPT":"17",
+    "DIX-HUIT":"18",
+    "DIX-NEUF":"19",
+    "VINGT":"20"
 
-
- /* Suppression des caractères inutiles */
-
- let propre=texte
-   .replace(/[^A-Z0-9]/g,"");
-
-
- /* Recherche d'une plaque française classique */
-
- const correspondance=
-   propre.match(/[A-Z]{2}[0-9]{3}[A-Z]{2}/);
-
- if(correspondance){
-
-   const plaque=correspondance[0];
-
-   return plaque.substring(0,2)+"-"+
-          plaque.substring(2,5)+"-"+
-          plaque.substring(5,7);
- }
+  };
 
 
- /* Si la reconnaissance a séparé les lettres,
-    on essaie de récupérer les 7 caractères */
+  /*
+   * Première tentative :
+   * recherche directe.
+   */
 
- const caracteres=propre
-   .match(/[A-Z0-9]/g)||[];
+  const direct=
+    t
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      )
+      .match(
+        /[A-Z]{2}[0-9]{3}[A-Z]{2}/
+      );
 
- if(caracteres.length>=7){
+  if(direct){
 
-   const sept=caracteres.slice(0,7).join("");
+    return formaterPlaque(
+      direct[0]
+    );
 
-   if(
-     /^[A-Z]{2}[0-9]{3}[A-Z]{2}$/.test(sept)
-   ){
+  }
 
-     return sept.substring(0,2)+"-"+
-            sept.substring(2,5)+"-"+
-            sept.substring(5,7);
-   }
- }
 
- return null;
+  /*
+   * Transformation des nombres.
+   */
+
+  let simple=t
+    .replace(
+      /-/g,
+      " "
+    )
+    .replace(
+      /[^A-Z0-9 ]/g,
+      " "
+    );
+
+
+  const mots=
+    simple
+      .split(/\s+/)
+      .filter(Boolean);
+
+
+  let resultat="";
+
+
+  for(
+    const mot of mots
+  ){
+
+    if(
+      /^[A-Z]+$/.test(mot) &&
+      mot.length<=3
+    ){
+
+      resultat+=mot;
+
+      continue;
+    }
+
+
+    if(
+      /^[0-9]+$/.test(mot)
+    ){
+
+      resultat+=mot;
+
+      continue;
+    }
+
+
+    if(
+      nombres[mot]
+    ){
+
+      const nombre=
+        nombres[mot];
+
+      if(
+        nombre.length<=2
+      ){
+
+        resultat+=nombre;
+      }
+
+    }
+
+  }
+
+
+  /*
+   * Recherche dans le résultat.
+   */
+
+  const correspondance=
+    resultat
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      )
+      .match(
+        /[A-Z]{2}[0-9]{3}[A-Z]{2}/
+      );
+
+
+  if(correspondance){
+
+    return formaterPlaque(
+      correspondance[0]
+    );
+
+  }
+
+
+  /*
+   * Dernière tentative :
+   * caractères individuels.
+   */
+
+  const caracteres=
+    resultat.match(
+      /[A-Z0-9]/g
+    ) || [];
+
+
+  if(
+    caracteres.length>=7
+  ){
+
+    for(
+      let debut=0;
+      debut<=
+        caracteres.length-7;
+      debut++
+    ){
+
+      const sept=
+        caracteres
+          .slice(
+            debut,
+            debut+7
+          )
+          .join("");
+
+      if(
+        /^[A-Z]{2}[0-9]{3}[A-Z]{2}$/
+          .test(sept)
+      ){
+
+        return formaterPlaque(
+          sept
+        );
+
+      }
+
+    }
+
+  }
+
+
+  return null;
 }
 
 
 /* =========================================================
-   PRÉPARATION IMAGE OCR
+   FORMAT PLAQUE
 ========================================================= */
 
-function chargerImage(fichier){
+function formaterPlaque(
+  plaque
+){
 
- return new Promise((resolve,reject)=>{
+  plaque=
+    plaque
+      .toUpperCase()
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      );
 
-   const reader=new FileReader();
+  if(
+    !/^[A-Z]{2}[0-9]{3}[A-Z]{2}$/
+      .test(plaque)
+  ){
 
-   reader.onload=e=>{
+    return null;
+  }
 
-     const img=new Image();
-
-     img.onload=()=>resolve(img);
-     img.onerror=reject;
-     img.src=e.target.result;
-   };
-
-   reader.onerror=reject;
-   reader.readAsDataURL(fichier);
- });
-}
-
-
-function creerImagesPourOCR(img){
-
- const largeur=1600;
- const ratio=largeur/img.width;
- const hauteur=Math.round(img.height*ratio);
-
- const canvas=document.createElement("canvas");
- canvas.width=largeur;
- canvas.height=hauteur;
-
- const ctx=canvas.getContext("2d");
-
- ctx.drawImage(img,0,0,largeur,hauteur);
-
- const original=canvas.toDataURL("image/jpeg",.95);
-
- const gris=document.createElement("canvas");
- gris.width=largeur;
- gris.height=hauteur;
-
- const g=gris.getContext("2d");
-
- g.drawImage(img,0,0,largeur,hauteur);
-
- const data=g.getImageData(
-   0,
-   0,
-   largeur,
-   hauteur
- );
-
- for(let i=0;i<data.data.length;i+=4){
-
-   const r=data.data[i];
-   const v=data.data[i+1];
-   const b=data.data[i+2];
-
-   let grisVal=
-     .299*r+
-     .587*v+
-     .114*b;
-
-   grisVal=(grisVal-128)*1.6+128;
-   grisVal=Math.max(
-     0,
-     Math.min(255,grisVal)
-   );
-
-   data.data[i]=grisVal;
-   data.data[i+1]=grisVal;
-   data.data[i+2]=grisVal;
- }
-
- g.putImageData(data,0,0);
-
- const noirBlanc=document.createElement("canvas");
-
- noirBlanc.width=largeur;
- noirBlanc.height=hauteur;
-
- const n=noirBlanc.getContext("2d");
-
- n.drawImage(gris,0,0);
-
- const d=n.getImageData(
-   0,
-   0,
-   largeur,
-   hauteur
- );
-
- for(let i=0;i<d.data.length;i+=4){
-
-   const valeur=d.data[i];
-
-   const resultat=
-     valeur>145?255:0;
-
-   d.data[i]=resultat;
-   d.data[i+1]=resultat;
-   d.data[i+2]=resultat;
- }
-
- n.putImageData(d,0,0);
-
- return[
-   original,
-   gris.toDataURL("image/jpeg",.95),
-   noirBlanc.toDataURL("image/jpeg",.95)
- ];
+  return(
+    plaque.substring(0,2)+
+    "-"+
+    plaque.substring(2,5)+
+    "-"+
+    plaque.substring(5,7)
+  );
 }
 
 
@@ -762,96 +940,379 @@ function creerImagesPourOCR(img){
    OCR
 ========================================================= */
 
-async function reconnaitreTexte(image){
+function chargerImage(
+  fichier
+){
 
- const worker=
-   await Tesseract.createWorker("eng");
+  return new Promise(
+    (resolve,reject)=>{
 
- await worker.setParameters({
+      const reader=
+        new FileReader();
 
-   tessedit_char_whitelist:
-     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      reader.onload=e=>{
 
-   tessedit_pageseg_mode:"7"
- });
+        const img=
+          new Image();
 
- const resultat=
-   await worker.recognize(image);
+        img.onload=()=>
+          resolve(img);
 
- const texte=
-   resultat.data.text||"";
+        img.onerror=reject;
 
- await worker.terminate();
+        img.src=
+          e.target.result;
 
- return texte.toUpperCase();
+      };
+
+      reader.onerror=reject;
+
+      reader.readAsDataURL(
+        fichier
+      );
+
+    }
+  );
 }
 
 
-function extraireImmatriculation(texte){
+function creerImagesPourOCR(
+  img
+){
 
- let propre=texte
-   .toUpperCase()
-   .replace(/[^A-Z0-9]/g,"");
+  const largeur=1600;
 
- const correspondance=
-   propre.match(
-     /[A-Z]{2}[0-9]{3}[A-Z]{2}/
-   );
+  const ratio=
+    largeur/img.width;
 
- if(!correspondance)return null;
+  const hauteur=
+    Math.round(
+      img.height*ratio
+    );
 
- const plaque=
-   correspondance[0];
 
- return plaque.substring(0,2)+"-"+
-        plaque.substring(2,5)+"-"+
-        plaque.substring(5,7);
+  const canvas=
+    document.createElement(
+      "canvas"
+    );
+
+  canvas.width=largeur;
+
+  canvas.height=hauteur;
+
+  const ctx=
+    canvas.getContext("2d");
+
+  ctx.drawImage(
+    img,
+    0,
+    0,
+    largeur,
+    hauteur
+  );
+
+
+  const original=
+    canvas.toDataURL(
+      "image/jpeg",
+      .95
+    );
+
+
+  const gris=
+    document.createElement(
+      "canvas"
+    );
+
+  gris.width=largeur;
+
+  gris.height=hauteur;
+
+  const g=
+    gris.getContext("2d");
+
+  g.drawImage(
+    img,
+    0,
+    0,
+    largeur,
+    hauteur
+  );
+
+
+  const data=
+    g.getImageData(
+      0,
+      0,
+      largeur,
+      hauteur
+    );
+
+
+  for(
+    let i=0;
+    i<data.data.length;
+    i+=4
+  ){
+
+    const r=data.data[i];
+
+    const v=data.data[i+1];
+
+    const b=data.data[i+2];
+
+    let grisVal=
+      .299*r+
+      .587*v+
+      .114*b;
+
+    grisVal=
+      (grisVal-128)*1.6+
+      128;
+
+    grisVal=
+      Math.max(
+        0,
+        Math.min(
+          255,
+          grisVal
+        )
+      );
+
+    data.data[i]=grisVal;
+
+    data.data[i+1]=grisVal;
+
+    data.data[i+2]=grisVal;
+
+  }
+
+
+  g.putImageData(
+    data,
+    0,
+    0
+  );
+
+
+  const noirBlanc=
+    document.createElement(
+      "canvas"
+    );
+
+  noirBlanc.width=largeur;
+
+  noirBlanc.height=hauteur;
+
+  const n=
+    noirBlanc.getContext("2d");
+
+  n.drawImage(
+    gris,
+    0,
+    0
+  );
+
+
+  const d=
+    n.getImageData(
+      0,
+      0,
+      largeur,
+      hauteur
+    );
+
+
+  for(
+    let i=0;
+    i<d.data.length;
+    i+=4
+  ){
+
+    const valeur=
+      d.data[i];
+
+    const resultat=
+      valeur>145
+      ?255
+      :0;
+
+    d.data[i]=resultat;
+
+    d.data[i+1]=resultat;
+
+    d.data[i+2]=resultat;
+
+  }
+
+
+  n.putImageData(
+    d,
+    0,
+    0
+  );
+
+
+  return[
+
+    original,
+
+    gris.toDataURL(
+      "image/jpeg",
+      .95
+    ),
+
+    noirBlanc.toDataURL(
+      "image/jpeg",
+      .95
+    )
+
+  ];
+}
+
+
+async function reconnaitreTexte(
+  image
+){
+
+  const worker=
+    await Tesseract.createWorker(
+      "eng"
+    );
+
+  await worker.setParameters({
+
+    tessedit_char_whitelist:
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+
+    tessedit_pageseg_mode:
+      "7"
+
+  });
+
+
+  const resultat=
+    await worker.recognize(
+      image
+    );
+
+
+  const texte=
+    resultat.data.text||"";
+
+
+  await worker.terminate();
+
+
+  return texte.toUpperCase();
+}
+
+
+function extraireImmatriculation(
+  texte
+){
+
+  const propre=
+    texte
+      .toUpperCase()
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      );
+
+
+  const correspondance=
+    propre.match(
+      /[A-Z]{2}[0-9]{3}[A-Z]{2}/
+    );
+
+
+  if(!correspondance)return null;
+
+
+  return formaterPlaque(
+    correspondance[0]
+  );
 }
 
 
 /* =========================================================
-   FORMAT IMMATRICULATION
+   FORMAT CHAMP
 ========================================================= */
 
-function formatImmatriculation(input){
+function formatImmatriculation(
+  input
+){
 
- let valeur=input.value
-   .toUpperCase()
-   .replace(/[^A-Z0-9]/g,"")
-   .substring(0,7);
+  let valeur=
+    input.value
+      .toUpperCase()
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      )
+      .substring(0,7);
 
- if(valeur.length>2)
-   valeur=
-     valeur.substring(0,2)+"-"+
-     valeur.substring(2);
 
- if(valeur.length>6)
-   valeur=
-     valeur.substring(0,6)+"-"+
-     valeur.substring(6);
+  if(valeur.length>2){
 
- input.value=valeur;
+    valeur=
+      valeur.substring(0,2)+
+      "-"+
+      valeur.substring(2);
+
+  }
+
+
+  if(valeur.length>6){
+
+    valeur=
+      valeur.substring(0,6)+
+      "-"+
+      valeur.substring(6);
+
+  }
+
+
+  input.value=valeur;
 }
 
 
-function nettoyerImmatriculation(valeur){
+function nettoyerImmatriculation(
+  valeur
+){
 
- valeur=valeur
-   .toUpperCase()
-   .replace(/[^A-Z0-9]/g,"")
-   .substring(0,7);
+  valeur=
+    valeur
+      .toUpperCase()
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      )
+      .substring(0,7);
 
- if(valeur.length>2)
-   valeur=
-     valeur.substring(0,2)+"-"+
-     valeur.substring(2);
 
- if(valeur.length>6)
-   valeur=
-     valeur.substring(0,6)+"-"+
-     valeur.substring(6);
+  if(valeur.length>2){
 
- return valeur;
+    valeur=
+      valeur.substring(0,2)+
+      "-"+
+      valeur.substring(2);
+
+  }
+
+
+  if(valeur.length>6){
+
+    valeur=
+      valeur.substring(0,6)+
+      "-"+
+      valeur.substring(6);
+
+  }
+
+
+  return valeur;
 }
 
 
@@ -861,320 +1322,417 @@ function nettoyerImmatriculation(valeur){
 
 function ajouterVehicule(){
 
- const input=
-   document.getElementById(
-     "immatriculation"
-   );
+  const input=
+    document.getElementById(
+      "immatriculation"
+    );
 
- const immatriculation=
-   nettoyerImmatriculation(input.value);
 
- if(!immatriculation){
+  const immatriculation=
+    nettoyerImmatriculation(
+      input.value
+    );
 
-   alert(
-     "Merci de saisir ou dicter une immatriculation."
-   );
 
-   return;
- }
+  if(!immatriculation){
 
- if(
-   immatriculation
-     .replace(/-/g,"")
-     .length!==7
- ){
+    alert(
+      "Merci de saisir ou dicter une immatriculation."
+    );
 
-   alert(
-     "L'immatriculation doit contenir 7 caractères."
-   );
+    return;
+  }
 
-   return;
- }
 
- if(
-   vehicules.some(
-     v=>v.immatriculation===immatriculation
-   )
- ){
+  if(
+    immatriculation
+      .replace(
+        /-/g,
+        ""
+      )
+      .length!==7
+  ){
 
-   alert("Ce véhicule existe déjà.");
+    alert(
+      "L'immatriculation doit contenir 7 caractères."
+    );
 
-   return;
- }
+    return;
+  }
 
- vehicules.push({
 
-   id:Date.now(),
+  if(
+    vehicules.some(
+      v=>
+        v.immatriculation===
+        immatriculation
+    )
+  ){
 
-   immatriculation:
-     immatriculation,
+    alert(
+      "Ce véhicule existe déjà."
+    );
 
-   photos:[]
- });
+    return;
+  }
 
- sauvegarderVehicules();
 
- input.value="";
+  vehicules.push({
 
- afficherVehicules();
+    id:Date.now(),
+
+    immatriculation:
+      immatriculation,
+
+    photos:[]
+
+  });
+
+
+  sauvegarderVehicules();
+
+  input.value="";
+
+  afficherVehicules();
 }
 
 
 function sauvegarderVehicules(){
 
- localStorage.setItem(
-   "atelierCarrosserieVehicules",
-   JSON.stringify(vehicules)
- );
+  localStorage.setItem(
+    "atelierCarrosserieVehicules",
+    JSON.stringify(
+      vehicules
+    )
+  );
 }
 
 
 function afficherVehicules(){
 
- const container=
-   document.getElementById(
-     "listeVehicules"
-   );
+  const container=
+    document.getElementById(
+      "listeVehicules"
+    );
 
- container.innerHTML="";
 
- if(vehicules.length===0){
+  container.innerHTML="";
 
-   container.innerHTML=
-     '<div class="empty">'+
-     'Aucun véhicule enregistré.'+
-     '</div>';
 
-   return;
- }
+  if(
+    vehicules.length===0
+  ){
 
- vehicules.forEach(vehicle=>{
+    container.innerHTML=
+      '<div class="empty">'+
+      'Aucun véhicule enregistré.'+
+      '</div>';
 
-   const div=
-     document.createElement("div");
+    return;
+  }
 
-   div.className="vehicle";
 
-   div.innerHTML=`
+  vehicules.forEach(
+    vehicle=>{
 
-     <div class="vehicle-title">
-       🚗 ${vehicle.immatriculation}
-     </div>
+      const div=
+        document.createElement(
+          "div"
+        );
 
-     <label
-       class="primary"
-       style="
-         display:block;
-         text-align:center;
-         margin-bottom:8px;
-       "
-     >
-       📷 Ajouter une photo
+      div.className="vehicle";
 
-       <input
-         type="file"
-         class="file-input"
-         accept="image/*"
-         capture="environment"
-         onchange="ajouterPhoto(${vehicle.id},this)"
-       >
-     </label>
 
-     <div
-       class="photos"
-       id="photos-${vehicle.id}"
-     ></div>
+      div.innerHTML=`
 
-     <div class="share-buttons">
+        <div class="vehicle-title">
+          🚗 ${vehicle.immatriculation}
+        </div>
 
-       <button
-         class="green"
-         onclick="preparerEmail(${vehicle.id})"
-       >
-         ✉️ Préparer l'e-mail
-       </button>
+        <label
+          class="primary"
+          style="
+            display:block;
+            text-align:center;
+            margin-bottom:8px;
+          "
+        >
 
-       <button
-         class="orange"
-         onclick="partagerPhotos(${vehicle.id})"
-       >
-         📸 Partager les photos
-       </button>
+          📷 Ajouter une photo
 
-       <button
-         class="red"
-         onclick="supprimerVehicule(${vehicle.id})"
-       >
-         🗑️ Supprimer le véhicule
-       </button>
+          <input
+            type="file"
+            class="file-input"
+            accept="image/*"
+            capture="environment"
+            onchange="ajouterPhoto(
+              ${vehicle.id},
+              this
+            )"
+          >
 
-     </div>
-   `;
+        </label>
 
-   container.appendChild(div);
 
-   afficherPhotos(vehicle);
- });
+        <div
+          class="photos"
+          id="photos-${vehicle.id}"
+        ></div>
+
+
+        <div class="share-buttons">
+
+          <button
+            class="green"
+            onclick="preparerEmail(
+              ${vehicle.id}
+            )"
+          >
+            ✉️ Préparer l'e-mail
+          </button>
+
+
+          <button
+            class="orange"
+            onclick="partagerPhotos(
+              ${vehicle.id}
+            )"
+          >
+            📸 Partager les photos
+          </button>
+
+
+          <button
+            class="red"
+            onclick="supprimerVehicule(
+              ${vehicle.id}
+            )"
+          >
+            🗑️ Supprimer le véhicule
+          </button>
+
+        </div>
+      `;
+
+
+      container.appendChild(div);
+
+      afficherPhotos(vehicle);
+
+    }
+  );
 }
 
 
 /* =========================================================
-   PHOTOS
+   AJOUT PHOTO
 ========================================================= */
 
-function ajouterPhoto(vehicleId,input){
+function ajouterPhoto(
+  vehicleId,
+  input
+){
 
- const fichier=input.files[0];
+  const fichier=
+    input.files[0];
 
- if(!fichier)return;
+  if(!fichier)return;
 
- const reader=
-   new FileReader();
 
- reader.onload=function(event){
+  const reader=
+    new FileReader();
 
-   const vehicle=
-     vehicules.find(
-       v=>v.id===vehicleId
-     );
 
-   if(!vehicle)return;
+  reader.onload=
+    function(event){
 
-   vehicle.photos.push({
+      const vehicle=
+        vehicules.find(
+          v=>v.id===vehicleId
+        );
 
-     image:event.target.result,
 
-     commentaire:""
-   });
+      if(!vehicle)return;
 
-   sauvegarderVehicules();
 
-   afficherVehicules();
+      vehicle.photos.push({
 
-   /* On ouvre immédiatement la dictée
-      pour commenter la photo */
+        image:
+          event.target.result,
 
-   setTimeout(()=>{
+        commentaire:""
 
-     const index=
-       vehicle.photos.length-1;
+      });
 
-     dicterCommentaire(
-       vehicle.id,
-       index
-     );
 
-   },300);
- };
+      sauvegarderVehicules();
 
- reader.readAsDataURL(fichier);
+      afficherVehicules();
 
- input.value="";
+
+      /*
+       * On demande immédiatement
+       * si l'utilisateur veut dicter
+       * le commentaire.
+       */
+
+      setTimeout(
+        function(){
+
+          dicterCommentaire(
+            vehicle.id,
+            vehicle.photos.length-1
+          );
+
+        },
+        300
+      );
+
+    };
+
+
+  reader.readAsDataURL(
+    fichier
+  );
+
+  input.value="";
 }
 
 
 /* =========================================================
-   AFFICHAGE PHOTOS + COMMENTAIRES
+   AFFICHER PHOTOS
 ========================================================= */
 
-function afficherPhotos(vehicle){
+function afficherPhotos(
+  vehicle
+){
 
- const container=
-   document.getElementById(
-     "photos-"+vehicle.id
-   );
+  const container=
+    document.getElementById(
+      "photos-"+vehicle.id
+    );
 
- if(!container)return;
 
- container.innerHTML="";
+  if(!container)return;
 
- vehicle.photos.forEach(
-   (photo,index)=>{
 
-     /* Sécurité pour anciennes données */
+  container.innerHTML="";
 
-     if(typeof photo==="string"){
 
-       photo={
-         image:photo,
-         commentaire:""
-       };
+  vehicle.photos.forEach(
+    (photo,index)=>{
 
-       vehicle.photos[index]=photo;
-     }
+      if(typeof photo==="string"){
 
-     const div=
-       document.createElement("div");
+        photo={
+          image:photo,
+          commentaire:""
+        };
 
-     div.className="photo-box";
+        vehicle.photos[index]=
+          photo;
+      }
 
-     const commentaire=
-       photo.commentaire||"";
 
-     div.innerHTML=`
+      const div=
+        document.createElement(
+          "div"
+        );
 
-       <img
-         src="${photo.image}"
-         alt="Photo du véhicule"
-       >
 
-       <button
-         class="delete-photo"
-         onclick="supprimerPhoto(${vehicle.id},${index})"
-       >
-         ×
-       </button>
+      div.className=
+        "photo-box";
 
-       <div class="photo-comment">
 
-         ${
-           commentaire
-           ?
-           "📝 "+escapeHTML(commentaire)
-           :
-           '<span class="photo-comment-empty">'+
-           'Aucun commentaire'+
-           '</span>'
-         }
+      const commentaire=
+        photo.commentaire||"";
 
-       </div>
 
-       <div class="comment-buttons">
+      div.innerHTML=`
 
-         <button
-           class="voice"
-           onclick="dicterCommentaire(${vehicle.id},${index})"
-         >
-           🎙️ ${
-             commentaire
-             ?
-             "Modifier le commentaire"
-             :
-             "Commenter cette photo"
-           }
-         </button>
+        <img
+          src="${photo.image}"
+          alt="Photo du véhicule"
+        >
 
-         ${
-           commentaire
-           ?
-           `
-           <button
-             class="gray"
-             onclick="modifierCommentaire(${vehicle.id},${index})"
-           >
-             ✏️ Modifier le texte
-           </button>
-           `
-           :
-           ""
-         }
 
-       </div>
-     `;
+        <button
+          class="delete-photo"
+          onclick="supprimerPhoto(
+            ${vehicle.id},
+            ${index}
+          )"
+        >
+          ×
+        </button>
 
-     container.appendChild(div);
-   }
- );
+
+        <div class="photo-comment">
+
+          ${
+            commentaire
+            ?
+            "📝 "+
+            escapeHTML(
+              commentaire
+            )
+            :
+            '<span class="photo-comment-empty">'+
+            'Aucun commentaire'+
+            '</span>'
+          }
+
+        </div>
+
+
+        <div class="comment-buttons">
+
+          <button
+            class="voice"
+            onclick="dicterCommentaire(
+              ${vehicle.id},
+              ${index}
+            )"
+          >
+
+            🎙️ ${
+              commentaire
+              ?
+              "Modifier le commentaire"
+              :
+              "Commenter cette photo"
+            }
+
+          </button>
+
+
+          ${
+            commentaire
+            ?
+            `
+            <button
+              class="gray"
+              onclick="modifierCommentaire(
+                ${vehicle.id},
+                ${index}
+              )"
+            >
+              ✏️ Modifier le texte
+            </button>
+            `
+            :
+            ""
+          }
+
+        </div>
+
+      `;
+
+
+      container.appendChild(div);
+
+    }
+  );
 }
 
 
@@ -1187,83 +1745,117 @@ function dicterCommentaire(
   photoIndex
 ){
 
- if(!("webkitSpeechRecognition" in window) &&
-    !("SpeechRecognition" in window)){
+  const SpeechRecognition=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-   const commentaire=
-     prompt(
-       "La dictée vocale n'est pas disponible. "+
-       "Écris le commentaire de la photo :"
-     );
 
-   if(commentaire!==null){
+  if(!SpeechRecognition){
 
-     enregistrerCommentaire(
-       vehicleId,
-       photoIndex,
-       commentaire
-     );
-   }
+    const commentaire=
+      prompt(
+        "Écris le commentaire de la photo :"
+      );
 
-   return;
- }
 
- const SpeechRecognition=
-   window.SpeechRecognition ||
-   window.webkitSpeechRecognition;
+    if(commentaire!==null){
 
- const recognition=
-   new SpeechRecognition();
+      enregistrerCommentaire(
+        vehicleId,
+        photoIndex,
+        commentaire
+      );
 
- recognition.lang="fr-FR";
- recognition.continuous=false;
- recognition.interimResults=false;
- recognition.maxAlternatives=1;
+    }
 
- recognition.onstart=function(){
+    return;
+  }
 
-   alert(
-     "🎙️ Parle maintenant pour commenter cette photo."
-   );
- };
 
- recognition.onresult=function(event){
+  const recognition=
+    new SpeechRecognition();
 
-   const texte=
-     event.results[0][0].transcript;
 
-   if(!texte)return;
+  recognition.lang=
+    "fr-FR";
 
-   const commentaire=
-     prompt(
-       "Vérifie le commentaire avant de l'enregistrer :",
-       texte
-     );
+  recognition.continuous=
+    false;
 
-   if(commentaire!==null){
+  recognition.interimResults=
+    false;
 
-     enregistrerCommentaire(
-       vehicleId,
-       photoIndex,
-       commentaire
-     );
-   }
- };
+  recognition.maxAlternatives=
+    1;
 
- recognition.onerror=function(event){
 
-   console.log(
-     "Erreur dictée commentaire:",
-     event
-   );
+  recognition.onstart=
+    function(){
 
-   alert(
-     "❌ Je n'ai pas compris le commentaire. "+
-     "Réessaie."
-   );
- };
+      alert(
+        "🎙️ Parle maintenant pour commenter cette photo."
+      );
 
- recognition.start();
+    };
+
+
+  recognition.onresult=
+    function(event){
+
+      const texte=
+        event
+          .results[0][0]
+          .transcript;
+
+
+      if(!texte)return;
+
+
+      const commentaire=
+        prompt(
+          "Vérifie le commentaire avant de l'enregistrer :",
+          texte
+        );
+
+
+      if(commentaire!==null){
+
+        enregistrerCommentaire(
+          vehicleId,
+          photoIndex,
+          commentaire
+        );
+
+      }
+
+    };
+
+
+  recognition.onerror=
+    function(event){
+
+      console.log(
+        "Erreur dictée commentaire :",
+        event
+      );
+
+      alert(
+        "❌ Je n'ai pas compris le commentaire. Réessaie."
+      );
+
+    };
+
+
+  try{
+
+    recognition.start();
+
+  }catch(erreur){
+
+    console.log(erreur);
+
+  }
+
 }
 
 
@@ -1277,26 +1869,33 @@ function enregistrerCommentaire(
   commentaire
 ){
 
- const vehicle=
-   vehicules.find(
-     v=>v.id===vehicleId
-   );
+  const vehicle=
+    vehicules.find(
+      v=>v.id===vehicleId
+    );
 
- if(!vehicle)return;
 
- if(!vehicle.photos[photoIndex])return;
+  if(!vehicle)return;
 
- vehicle.photos[photoIndex].commentaire=
-   commentaire.trim();
 
- sauvegarderVehicules();
+  if(!vehicle.photos[photoIndex])
+    return;
 
- afficherVehicules();
+
+  vehicle
+    .photos[photoIndex]
+    .commentaire=
+      commentaire.trim();
+
+
+  sauvegarderVehicules();
+
+  afficherVehicules();
 }
 
 
 /* =========================================================
-   MODIFIER COMMENTAIRE AU CLAVIER
+   MODIFIER COMMENTAIRE
 ========================================================= */
 
 function modifierCommentaire(
@@ -1304,44 +1903,68 @@ function modifierCommentaire(
   photoIndex
 ){
 
- const vehicle=
-   vehicules.find(
-     v=>v.id===vehicleId
-   );
+  const vehicle=
+    vehicules.find(
+      v=>v.id===vehicleId
+    );
 
- if(!vehicle)return;
 
- const ancien=
-   vehicle.photos[photoIndex].commentaire||"";
+  if(!vehicle)return;
 
- const nouveau=
-   prompt(
-     "Modifier le commentaire :",
-     ancien
-   );
 
- if(nouveau===null)return;
+  const ancien=
+    vehicle
+      .photos[photoIndex]
+      .commentaire||"";
 
- enregistrerCommentaire(
-   vehicleId,
-   photoIndex,
-   nouveau
- );
+
+  const nouveau=
+    prompt(
+      "Modifier le commentaire :",
+      ancien
+    );
+
+
+  if(nouveau===null)return;
+
+
+  enregistrerCommentaire(
+    vehicleId,
+    photoIndex,
+    nouveau
+  );
 }
 
 
 /* =========================================================
-   SÉCURITÉ AFFICHAGE TEXTE
+   SÉCURITÉ TEXTE
 ========================================================= */
 
-function escapeHTML(texte){
+function escapeHTML(
+  texte
+){
 
- return String(texte)
-   .replace(/&/g,"&amp;")
-   .replace(/</g,"&lt;")
-   .replace(/>/g,"&gt;")
-   .replace(/"/g,"&quot;")
-   .replace(/'/g,"&#039;");
+  return String(texte)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 }
 
 
@@ -1354,21 +1977,24 @@ function supprimerPhoto(
   photoIndex
 ){
 
- const vehicle=
-   vehicules.find(
-     v=>v.id===vehicleId
-   );
+  const vehicle=
+    vehicules.find(
+      v=>v.id===vehicleId
+    );
 
- if(!vehicle)return;
 
- vehicle.photos.splice(
-   photoIndex,
-   1
- );
+  if(!vehicle)return;
 
- sauvegarderVehicules();
 
- afficherVehicules();
+  vehicle.photos.splice(
+    photoIndex,
+    1
+  );
+
+
+  sauvegarderVehicules();
+
+  afficherVehicules();
 }
 
 
@@ -1376,29 +2002,37 @@ function supprimerPhoto(
    SUPPRIMER VÉHICULE
 ========================================================= */
 
-function supprimerVehicule(vehicleId){
+function supprimerVehicule(
+  vehicleId
+){
 
- const vehicle=
-   vehicules.find(
-     v=>v.id===vehicleId
-   );
+  const vehicle=
+    vehicules.find(
+      v=>v.id===vehicleId
+    );
 
- if(!vehicle)return;
 
- if(!confirm(
-   "Supprimer le véhicule "+
-   vehicle.immatriculation+
-   " et toutes ses photos ?"
- ))return;
+  if(!vehicle)return;
 
- vehicules=
-   vehicules.filter(
-     v=>v.id!==vehicleId
-   );
 
- sauvegarderVehicules();
+  if(
+    !confirm(
+      "Supprimer le véhicule "+
+      vehicle.immatriculation+
+      " et toutes ses photos ?"
+    )
+  )return;
 
- afficherVehicules();
+
+  vehicules=
+    vehicules.filter(
+      v=>v.id!==vehicleId
+    );
+
+
+  sauvegarderVehicules();
+
+  afficherVehicules();
 }
 
 
@@ -1408,125 +2042,154 @@ function supprimerVehicule(vehicleId){
 
 function ajouterEmail(){
 
- const input=
-   document.getElementById(
-     "nouvelEmail"
-   );
+  const input=
+    document.getElementById(
+      "nouvelEmail"
+    );
 
- const email=
-   input.value
-     .trim()
-     .toLowerCase();
 
- if(!email){
+  const email=
+    input.value
+      .trim()
+      .toLowerCase();
 
-   alert(
-     "Merci de saisir une adresse e-mail."
-   );
 
-   return;
- }
+  if(!email){
 
- if(!email.includes("@")){
+    alert(
+      "Merci de saisir une adresse e-mail."
+    );
 
-   alert(
-     "Cette adresse e-mail semble incorrecte."
-   );
+    return;
+  }
 
-   return;
- }
 
- if(emails.includes(email)){
+  if(!email.includes("@")){
 
-   alert(
-     "Cette adresse existe déjà."
-   );
+    alert(
+      "Cette adresse e-mail semble incorrecte."
+    );
 
-   return;
- }
+    return;
+  }
 
- emails.push(email);
 
- sauvegarderEmails();
+  if(
+    emails.includes(email)
+  ){
 
- input.value="";
+    alert(
+      "Cette adresse existe déjà."
+    );
 
- afficherEmails();
+    return;
+  }
+
+
+  emails.push(email);
+
+  sauvegarderEmails();
+
+  input.value="";
+
+  afficherEmails();
 }
 
 
 function sauvegarderEmails(){
 
- localStorage.setItem(
-   "atelierCarrosserieEmails",
-   JSON.stringify(emails)
- );
+  localStorage.setItem(
+    "atelierCarrosserieEmails",
+    JSON.stringify(
+      emails
+    )
+  );
 }
 
 
 function afficherEmails(){
 
- const container=
-   document.getElementById(
-     "listeEmails"
-   );
+  const container=
+    document.getElementById(
+      "listeEmails"
+    );
 
- container.innerHTML="";
 
- if(emails.length===0){
+  container.innerHTML="";
 
-   container.innerHTML=
-     '<div class="empty">'+
-     'Aucune adresse enregistrée.'+
-     '</div>';
 
-   return;
- }
+  if(
+    emails.length===0
+  ){
 
- emails.forEach(
-   (email,index)=>{
+    container.innerHTML=
+      '<div class="empty">'+
+      'Aucune adresse enregistrée.'+
+      '</div>';
 
-     const div=
-       document.createElement("div");
+    return;
+  }
 
-     div.className="email-row";
 
-     div.innerHTML=`
+  emails.forEach(
+    (email,index)=>{
 
-       <label>
+      const div=
+        document.createElement(
+          "div"
+        );
 
-         <input
-           type="checkbox"
-           class="email-checkbox"
-           value="${escapeHTML(email)}"
-         >
 
-         ${escapeHTML(email)}
+      div.className=
+        "email-row";
 
-       </label>
 
-       <button
-         class="small-delete"
-         onclick="supprimerEmail(${index})"
-       >
-         Supprimer
-       </button>
+      div.innerHTML=`
 
-     `;
+        <label>
 
-     container.appendChild(div);
-   }
- );
+          <input
+            type="checkbox"
+            class="email-checkbox"
+            value="${escapeHTML(email)}"
+          >
+
+          ${escapeHTML(email)}
+
+        </label>
+
+
+        <button
+          class="small-delete"
+          onclick="supprimerEmail(
+            ${index}
+          )"
+        >
+          Supprimer
+        </button>
+
+      `;
+
+
+      container.appendChild(div);
+
+    }
+  );
 }
 
 
-function supprimerEmail(index){
+function supprimerEmail(
+  index
+){
 
- emails.splice(index,1);
+  emails.splice(
+    index,
+    1
+  );
 
- sauvegarderEmails();
+  sauvegarderEmails();
 
- afficherEmails();
+  afficherEmails();
 }
 
 
@@ -1534,69 +2197,90 @@ function supprimerEmail(index){
    EMAIL
 ========================================================= */
 
-function preparerEmail(vehicleId){
+function preparerEmail(
+  vehicleId
+){
 
- const vehicle=
-   vehicules.find(
-     v=>v.id===vehicleId
-   );
+  const vehicle=
+    vehicules.find(
+      v=>v.id===vehicleId
+    );
 
- if(!vehicle)return;
 
- const cases=
-   document.querySelectorAll(
-     ".email-checkbox:checked"
-   );
+  if(!vehicle)return;
 
- if(cases.length===0){
 
-   alert(
-     "Sélectionne au moins une adresse e-mail."
-   );
+  const cases=
+    document.querySelectorAll(
+      ".email-checkbox:checked"
+    );
 
-   return;
- }
 
- const destinataires=
-   Array.from(cases)
-     .map(c=>c.value)
-     .join(",");
+  if(
+    cases.length===0
+  ){
 
- const sujet=
-   "Photos véhicule "+
-   vehicle.immatriculation;
+    alert(
+      "Sélectionne au moins une adresse e-mail."
+    );
 
- let corps=
-   "Bonjour,\n\n"+
-   "Veuillez trouver les photos du véhicule "+
-   vehicle.immatriculation+
-   ".\n\n";
+    return;
+  }
 
- /* Ajout des commentaires des photos */
 
- vehicle.photos.forEach(
-   (photo,index)=>{
+  const destinataires=
+    Array.from(cases)
+      .map(
+        c=>c.value
+      )
+      .join(",");
 
-     if(photo.commentaire){
 
-       corps+=
-         "Photo "+(index+1)+" : "+
-         photo.commentaire+
-         "\n";
-     }
-   }
- );
+  const sujet=
+    "Photos véhicule "+
+    vehicle.immatriculation;
 
- corps+=
-   "\nCordialement,\n"+
-   "Atelier Carrosserie Sébie";
 
- window.location.href=
-   "mailto:"+destinataires+
-   "?subject="+
-   encodeURIComponent(sujet)+
-   "&body="+
-   encodeURIComponent(corps);
+  let corps=
+    "Bonjour,\n\n"+
+    "Veuillez trouver les photos du véhicule "+
+    vehicle.immatriculation+
+    ".\n\n";
+
+
+  vehicle.photos.forEach(
+    (photo,index)=>{
+
+      if(photo.commentaire){
+
+        corps+=
+          "Photo "+
+          (index+1)+
+          " : "+
+          photo.commentaire+
+          "\n";
+      }
+
+    }
+  );
+
+
+  corps+=
+    "\nCordialement,\n"+
+    "Atelier Carrosserie Sébie";
+
+
+  window.location.href=
+    "mailto:"+
+    destinataires+
+    "?subject="+
+    encodeURIComponent(
+      sujet
+    )+
+    "&body="+
+    encodeURIComponent(
+      corps
+    );
 }
 
 
@@ -1604,120 +2288,157 @@ function preparerEmail(vehicleId){
    PARTAGE PHOTOS
 ========================================================= */
 
-async function partagerPhotos(vehicleId){
+async function partagerPhotos(
+  vehicleId
+){
 
- const vehicle=
-   vehicules.find(
-     v=>v.id===vehicleId
-   );
+  const vehicle=
+    vehicules.find(
+      v=>v.id===vehicleId
+    );
 
- if(!vehicle)return;
 
- if(vehicle.photos.length===0){
+  if(!vehicle)return;
 
-   alert(
-     "Ce véhicule n'a aucune photo."
-   );
 
-   return;
- }
+  if(
+    vehicle.photos.length===0
+  ){
 
- try{
+    alert(
+      "Ce véhicule n'a aucune photo."
+    );
 
-   const fichiers=[];
+    return;
+  }
 
-   for(
-     let i=0;
-     i<vehicle.photos.length;
-     i++
-   ){
 
-     const response=
-       await fetch(
-         vehicle.photos[i].image
-       );
+  try{
 
-     const blob=
-       await response.blob();
+    const fichiers=[];
 
-     fichiers.push(
-       new File(
-         [blob],
-         vehicle.immatriculation+
-         "-"+(i+1)+".jpg",
-         {
-           type:
-             blob.type||
-             "image/jpeg"
-         }
-       )
-     );
-   }
 
-   if(
-     navigator.share &&
-     navigator.canShare &&
-     navigator.canShare({
-       files:fichiers
-     })
-   ){
+    for(
+      let i=0;
+      i<vehicle.photos.length;
+      i++
+    ){
 
-     let texte=
-       "Photos du véhicule "+
-       vehicle.immatriculation;
+      const response=
+        await fetch(
+          vehicle.photos[i].image
+        );
 
-     const commentaires=
-       vehicle.photos
-         .filter(
-           p=>p.commentaire
-         )
-         .map(
-           (p,i)=>
-             "Photo "+(i+1)+" : "+
-             p.commentaire
-         );
 
-     if(commentaires.length){
+      const blob=
+        await response.blob();
 
-       texte+="\n\n"+
-         commentaires.join("\n");
-     }
 
-     await navigator.share({
+      fichiers.push(
 
-       title:
-         "Photos "+
-         vehicle.immatriculation,
+        new File(
+          [blob],
 
-       text:texte,
+          vehicle.immatriculation+
+          "-"+
+          (i+1)+
+          ".jpg",
 
-       files:fichiers
-     });
+          {
+            type:
+              blob.type||
+              "image/jpeg"
+          }
+        )
 
-   }else if(navigator.share){
+      );
 
-     await navigator.share({
+    }
 
-       title:
-         "Photos "+
-         vehicle.immatriculation,
 
-       text:
-         "Photos du véhicule "+
-         vehicle.immatriculation
-     });
+    let texte=
+      "Photos du véhicule "+
+      vehicle.immatriculation;
 
-   }else{
 
-     alert(
-       "Le partage de fichiers n'est pas disponible sur cet appareil."
-     );
-   }
+    const commentaires=
+      vehicle.photos
+        .filter(
+          p=>p.commentaire
+        )
+        .map(
+          p=>p.commentaire
+        );
 
- }catch(error){
 
-   console.log(error);
- }
+    if(
+      commentaires.length
+    ){
+
+      texte+=
+        "\n\n"+
+        commentaires
+          .map(
+            (c,i)=>
+              "Photo "+
+              (i+1)+
+              " : "+
+              c
+          )
+          .join("\n");
+
+    }
+
+
+    if(
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({
+        files:fichiers
+      })
+    ){
+
+      await navigator.share({
+
+        title:
+          "Photos "+
+          vehicle.immatriculation,
+
+        text:texte,
+
+        files:fichiers
+
+      });
+
+    }else if(
+      navigator.share
+    ){
+
+      await navigator.share({
+
+        title:
+          "Photos "+
+          vehicle.immatriculation,
+
+        text:texte
+
+      });
+
+    }else{
+
+      alert(
+        "Le partage de fichiers n'est pas disponible sur cet appareil."
+      );
+
+    }
+
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
 }
 
 
