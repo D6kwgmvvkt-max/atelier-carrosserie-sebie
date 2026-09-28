@@ -14,25 +14,25 @@ body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
   background:#f2f2f7;
-  color:#111
+  color:#111;
 }
 
 header{
   background:#111;
   color:white;
   padding:20px;
-  text-align:center
+  text-align:center;
 }
 
 header h1{
   margin:0;
-  font-size:24px
+  font-size:24px;
 }
 
 .container{
   padding:15px;
   max-width:700px;
-  margin:auto
+  margin:auto;
 }
 
 .card{
@@ -40,22 +40,29 @@ header h1{
   border-radius:15px;
   padding:15px;
   margin-bottom:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08)
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
 h2{
   margin-top:0;
-  font-size:20px
+  font-size:20px;
 }
 
 input[type=text],
-input[type=email]{
+input[type=email],
+textarea{
   width:100%;
   padding:14px;
   border:1px solid #ccc;
   border-radius:10px;
   font-size:17px;
-  margin-bottom:10px
+  margin-bottom:10px;
+  font-family:inherit;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
 }
 
 button{
@@ -64,45 +71,45 @@ button{
   padding:13px 16px;
   font-size:16px;
   margin:4px 0;
-  cursor:pointer
+  cursor:pointer;
 }
 
 .primary{
   background:#007aff;
   color:white;
-  width:100%
+  width:100%;
 }
 
 .scanner{
   background:#5856d6;
   color:white;
-  width:100%
+  width:100%;
 }
 
 .voice{
   background:#ff2d55;
   color:white;
-  width:100%
+  width:100%;
 }
 
 .green{
   background:#34c759;
-  color:white
+  color:white;
 }
 
 .orange{
   background:#ff9500;
-  color:white
+  color:white;
 }
 
 .gray{
   background:#8e8e93;
-  color:white
+  color:white;
 }
 
 .red{
   background:#ff3b30;
-  color:white
+  color:white;
 }
 
 .info{
@@ -110,37 +117,36 @@ button{
   padding:12px;
   border-radius:10px;
   font-size:14px;
-  margin-bottom:10px
+  margin-bottom:10px;
 }
 
 .status{
   display:none;
-  background:#fff3cd;
   padding:12px;
   border-radius:10px;
   margin-top:8px;
   font-size:14px;
-  text-align:center
+  text-align:center;
 }
 
 .vehicle{
   background:#f8f8f8;
   border-radius:12px;
   padding:12px;
-  margin-top:10px
+  margin-top:10px;
 }
 
 .vehicle-title{
   font-size:20px;
   font-weight:bold;
-  margin-bottom:10px
+  margin-bottom:10px;
 }
 
 .photos{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:10px;
-  margin-top:10px
+  margin-top:10px;
 }
 
 .photo-box{
@@ -148,7 +154,7 @@ button{
   background:white;
   border-radius:10px;
   padding-bottom:8px;
-  overflow:hidden
+  overflow:hidden;
 }
 
 .photo-box img{
@@ -156,7 +162,7 @@ button{
   height:160px;
   object-fit:cover;
   border-radius:10px 10px 0 0;
-  display:block
+  display:block;
 }
 
 .delete-photo{
@@ -169,29 +175,29 @@ button{
   width:32px;
   height:32px;
   padding:0;
-  font-size:18px
+  font-size:18px;
 }
 
 .photo-comment{
   padding:8px;
   font-size:13px;
   color:#333;
-  min-height:35px
+  min-height:35px;
 }
 
 .photo-comment-empty{
   color:#888;
-  font-style:italic
+  font-style:italic;
 }
 
 .comment-buttons{
-  padding:0 8px
+  padding:0 8px;
 }
 
 .comment-buttons button{
   width:100%;
   font-size:13px;
-  padding:9px
+  padding:9px;
 }
 
 .email-row{
@@ -200,44 +206,41 @@ button{
   justify-content:space-between;
   gap:10px;
   padding:8px 0;
-  border-bottom:1px solid #eee
+  border-bottom:1px solid #eee;
 }
 
 .email-row label{
   flex:1;
-  word-break:break-all
+  word-break:break-all;
 }
 
 .small-delete{
   background:#ff3b30;
   color:white;
   padding:7px 10px;
-  font-size:13px
+  font-size:13px;
 }
 
 .empty{
   color:#777;
   text-align:center;
-  padding:10px
+  padding:10px;
 }
 
 .file-input{
-  display:none
+  display:none;
 }
 
 .share-buttons{
-  margin-top:10px
+  margin-top:10px;
 }
 
-.recording{
-  background:#ff2d55 !important;
-  animation:pulse 1s infinite
-}
-
-@keyframes pulse{
-  0%{opacity:1}
-  50%{opacity:.55}
-  100%{opacity:1}
+.tip{
+  background:#fff3cd;
+  padding:12px;
+  border-radius:10px;
+  font-size:14px;
+  margin-top:8px;
 }
 </style>
 </head>
@@ -250,95 +253,88 @@ button{
 
 <div class="container">
 
+<!-- =====================================================
+     NOUVEAU VÉHICULE
+===================================================== -->
+
 <div class="card">
 
 <h2>➕ Nouveau véhicule</h2>
 
 <div class="info">
-
-📷 Tu peux scanner directement l'immatriculation.
-
+📷 Tu peux scanner l'immatriculation.
 <br><br>
-
-🎙️ Tu peux aussi la dicter.
-
-<br><br>
-
-Exemple :
-<strong>AB 123 CD → AB-123-CD</strong>
-
+🎙️ Ou utiliser le micro du clavier de l'iPhone.
 </div>
 
 <button
-  class="scanner"
-  onclick="ouvrirScanner()"
->
+class="scanner"
+onclick="ouvrirScanner()">
 📷 Scanner l'immatriculation
 </button>
 
 <input
-  id="scannerImmatriculation"
-  type="file"
-  class="file-input"
-  accept="image/*"
-  capture="environment"
-  onchange="scannerPhoto(this)"
->
+id="scannerImmatriculation"
+type="file"
+class="file-input"
+accept="image/*"
+capture="environment"
+onchange="scannerPhoto(this)">
 
 <div
-  id="scannerStatus"
-  class="status"
-></div>
+id="scannerStatus"
+class="status">
+</div>
 
 <input
-  id="immatriculation"
-  type="text"
-  placeholder="Exemple : AB-123-CD"
-  autocomplete="off"
-  autocapitalize="characters"
-  spellcheck="false"
-  maxlength="9"
-  oninput="formatImmatriculation(this)"
->
+id="immatriculation"
+type="text"
+placeholder="Exemple : AB-123-CD"
+autocomplete="off"
+autocapitalize="characters"
+spellcheck="false"
+maxlength="9"
+oninput="formatImmatriculation(this)">
 
 <button
-  class="voice"
-  id="boutonVoixImmat"
-  onclick="dicterImmatriculation()"
->
-🎙️ Dicter l'immatriculation
+class="voice"
+onclick="activerClavierImmatriculation()">
+🎙️ Dicter avec le clavier de l'iPhone
 </button>
 
-<div
-  id="voiceStatus"
-  class="status"
-></div>
+<div class="tip">
+Après avoir appuyé sur le bouton, appuie sur
+<strong>🎙️ le micro du clavier de l'iPhone</strong>
+et dis par exemple :
+<strong>« AB 123 CD »</strong>
+</div>
 
 <button
-  class="primary"
-  onclick="ajouterVehicule()"
->
+class="primary"
+onclick="ajouterVehicule()">
 ➕ Ajouter le véhicule
 </button>
 
 </div>
 
 
+<!-- =====================================================
+     EMAILS
+===================================================== -->
+
 <div class="card">
 
 <h2>📧 Adresses e-mail</h2>
 
 <input
-  id="nouvelEmail"
-  type="email"
-  placeholder="adresse@email.com"
-  autocomplete="email"
->
+id="nouvelEmail"
+type="email"
+placeholder="adresse@email.com"
+autocomplete="email">
 
 <button
-  class="primary"
-  onclick="ajouterEmail()"
->
+class="primary"
+onclick="ajouterEmail()">
 ➕ Ajouter une adresse
 </button>
 
@@ -346,6 +342,10 @@ Exemple :
 
 </div>
 
+
+<!-- =====================================================
+     VÉHICULES
+===================================================== -->
 
 <div class="card">
 
@@ -360,2091 +360,1567 @@ Exemple :
 
 <script>
 
-/* =========================================================
+/* =====================================================
    DONNÉES
-========================================================= */
+===================================================== */
 
 let vehicules=JSON.parse(
-  localStorage.getItem(
-    "atelierCarrosserieVehicules"
-  ) || "[]"
+localStorage.getItem(
+"atelierCarrosserieVehicules"
+)||"[]"
 );
 
 let emails=JSON.parse(
-  localStorage.getItem(
-    "atelierCarrosserieEmails"
-  ) || "[]"
+localStorage.getItem(
+"atelierCarrosserieEmails"
+)||"[]"
 );
 
 
-/* =========================================================
-   MIGRATION ANCIENNES PHOTOS
-========================================================= */
+/* =====================================================
+   MIGRATION DES PHOTOS
+===================================================== */
 
 vehicules.forEach(vehicle=>{
 
-  if(!Array.isArray(vehicle.photos)){
-    vehicle.photos=[];
-  }
+if(!Array.isArray(vehicle.photos)){
+vehicle.photos=[];
+}
 
-  vehicle.photos=vehicle.photos.map(photo=>{
+vehicle.photos=vehicle.photos.map(photo=>{
 
-    if(typeof photo==="string"){
+if(typeof photo==="string"){
+return{
+image:photo,
+commentaire:""
+};
+}
 
-      return {
-        image:photo,
-        commentaire:""
-      };
+return photo;
 
-    }
-
-    return photo;
-
-  });
+});
 
 });
 
 sauvegarderVehicules();
 
 
-/* =========================================================
+/* =====================================================
+   CLAVIER IPHONE — IMMATRICULATION
+===================================================== */
+
+function activerClavierImmatriculation(){
+
+const input=
+document.getElementById(
+"immatriculation"
+);
+
+input.focus();
+
+input.select();
+
+}
+
+
+/* =====================================================
    SCANNER
-========================================================= */
+===================================================== */
 
 function ouvrirScanner(){
 
-  document
-    .getElementById(
-      "scannerImmatriculation"
-    )
-    .click();
+document
+.getElementById(
+"scannerImmatriculation"
+)
+.click();
 
 }
 
 
 async function scannerPhoto(input){
 
-  const fichier=input.files[0];
+const fichier=input.files[0];
 
-  if(!fichier)return;
+if(!fichier)return;
 
-  const status=
-    document.getElementById(
-      "scannerStatus"
-    );
+const status=
+document.getElementById(
+"scannerStatus"
+);
 
-  status.style.display="block";
+status.style.display="block";
 
-  status.style.background="#fff3cd";
+status.style.background="#fff3cd";
 
-  status.textContent=
-    "📷 Analyse de la photo en cours…";
+status.textContent=
+"📷 Analyse de la photo en cours…";
 
-  try{
+try{
 
-    const image=
-      await chargerImage(fichier);
+const image=
+await chargerImage(fichier);
 
-    const images=
-      creerImagesPourOCR(image);
+const images=
+creerImagesPourOCR(image);
 
-    let resultat="";
+let resultat="";
 
-    for(
-      let i=0;
-      i<images.length;
-      i++
-    ){
-
-      status.textContent=
-        "🔎 Reconnaissance… "+
-        (i+1)+"/"+
-        images.length;
-
-      const texte=
-        await reconnaitreTexte(
-          images[i]
-        );
-
-      const plaque=
-        extraireImmatriculation(
-          texte
-        );
-
-      if(plaque){
-
-        resultat=plaque;
-
-        break;
-      }
-
-    }
-
-    if(resultat){
-
-      document.getElementById(
-        "immatriculation"
-      ).value=resultat;
-
-      status.style.background=
-        "#d4edda";
-
-      status.textContent=
-        "✅ Immatriculation reconnue : "+
-        resultat;
-
-    }else{
-
-      status.style.background=
-        "#f8d7da";
-
-      status.textContent=
-        "❌ Plaque non reconnue. "+
-        "Tu peux la dicter avec le bouton 🎙️.";
-
-    }
-
-  }catch(erreur){
-
-    console.error(erreur);
-
-    status.style.background=
-      "#f8d7da";
-
-    status.textContent=
-      "❌ Impossible de lire la plaque. "+
-      "Tu peux la dicter.";
-
-  }
-
-  input.value="";
-}
-
-
-/* =========================================================
-   DICTÉE IMMATRICULATION
-========================================================= */
-
-function dicterImmatriculation(){
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if(!SpeechRecognition){
-
-    alert(
-      "La dictée vocale n'est pas disponible ici. "+
-      "Tu peux utiliser le micro du clavier de l'iPhone."
-    );
-
-    return;
-  }
-
-  const recognition=
-    new SpeechRecognition();
-
-  recognition.lang="fr-FR";
-
-  recognition.continuous=false;
-
-  recognition.interimResults=false;
-
-  recognition.maxAlternatives=10;
-
-  const bouton=
-    document.getElementById(
-      "boutonVoixImmat"
-    );
-
-  const status=
-    document.getElementById(
-      "voiceStatus"
-    );
-
-  bouton.classList.add(
-    "recording"
-  );
-
-  bouton.textContent=
-    "🔴 Écoute en cours…";
-
-  status.style.display="block";
-
-  status.style.background=
-    "#fff3cd";
-
-  status.textContent=
-    "🎙️ Dis l'immatriculation…";
-
-
-  recognition.onresult=
-    function(event){
-
-      let textes=[];
-
-      for(
-        let i=0;
-        i<event.results[0].length;
-        i++
-      ){
-
-        const texte=
-          event.results[0][i]
-            .transcript;
-
-        if(texte){
-
-          textes.push(texte);
-        }
-
-      }
-
-      let plaque=null;
-
-      for(
-        const texte of textes
-      ){
-
-        plaque=
-          convertirDicteeEnImmatriculation(
-            texte
-          );
-
-        if(plaque)break;
-
-      }
-
-
-      if(plaque){
-
-        document.getElementById(
-          "immatriculation"
-        ).value=plaque;
-
-        status.style.background=
-          "#d4edda";
-
-        status.textContent=
-          "✅ Immatriculation reconnue : "+
-          plaque;
-
-      }else{
-
-        status.style.background=
-          "#f8d7da";
-
-        status.textContent=
-          "❌ Je n'ai pas reconnu la plaque. "+
-          "Essaie en disant lentement : "+
-          "« AB 123 CD »";
-
-      }
-
-    };
-
-
-  recognition.onerror=
-    function(event){
-
-      console.log(
-        "Erreur dictée :",
-        event.error
-      );
-
-      status.style.background=
-        "#f8d7da";
-
-      status.textContent=
-        "❌ La dictée n'a pas été comprise. "+
-        "Réessaie.";
-
-    };
-
-
-  recognition.onend=
-    function(){
-
-      bouton.classList.remove(
-        "recording"
-      );
-
-      bouton.textContent=
-        "🎙️ Dicter l'immatriculation";
-
-    };
-
-
-  try{
-
-    recognition.start();
-
-  }catch(erreur){
-
-    console.log(erreur);
-
-  }
-
-}
-
-
-/* =========================================================
-   CONVERSION DICTÉE
-========================================================= */
-
-function convertirDicteeEnImmatriculation(
-  texte
+for(
+let i=0;
+i<images.length;
+i++
 ){
 
-  if(!texte)return null;
+status.textContent=
+"🔎 Reconnaissance… "+
+(i+1)+"/"+
+images.length;
 
-  let t=texte
-    .toUpperCase()
-    .normalize("NFD")
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-    .trim();
+const texte=
+await reconnaitreTexte(
+images[i]
+);
 
+const plaque=
+extraireImmatriculation(
+texte
+);
 
-  const nombres={
+if(plaque){
 
-    "ZERO":"0",
-    "UN":"1",
-    "UNE":"1",
-    "DEUX":"2",
-    "TROIS":"3",
-    "QUATRE":"4",
-    "CINQ":"5",
-    "SIX":"6",
-    "SEPT":"7",
-    "HUIT":"8",
-    "NEUF":"9",
-    "DIX":"10",
-    "ONZE":"11",
-    "DOUZE":"12",
-    "TREIZE":"13",
-    "QUATORZE":"14",
-    "QUINZE":"15",
-    "SEIZE":"16",
-    "DIX-SEPT":"17",
-    "DIX-HUIT":"18",
-    "DIX-NEUF":"19",
-    "VINGT":"20"
+resultat=plaque;
+break;
 
-  };
+}
 
+}
 
-  /*
-   * Première tentative :
-   * recherche directe.
-   */
+if(resultat){
 
-  const direct=
-    t
-      .replace(
-        /[^A-Z0-9]/g,
-        ""
-      )
-      .match(
-        /[A-Z]{2}[0-9]{3}[A-Z]{2}/
-      );
+document.getElementById(
+"immatriculation"
+).value=resultat;
 
-  if(direct){
+status.style.background=
+"#d4edda";
 
-    return formaterPlaque(
-      direct[0]
-    );
+status.textContent=
+"✅ Immatriculation reconnue : "+
+resultat;
 
-  }
+}else{
 
+status.style.background=
+"#f8d7da";
 
-  /*
-   * Transformation des nombres.
-   */
+status.textContent=
+"❌ Plaque non reconnue. "+
+"Utilise le champ et le micro du clavier.";
 
-  let simple=t
-    .replace(
-      /-/g,
-      " "
-    )
-    .replace(
-      /[^A-Z0-9 ]/g,
-      " "
-    );
+}
 
+}catch(erreur){
 
-  const mots=
-    simple
-      .split(/\s+/)
-      .filter(Boolean);
+console.error(erreur);
 
+status.style.background=
+"#f8d7da";
 
-  let resultat="";
+status.textContent=
+"❌ Impossible de lire la plaque.";
 
+}
 
-  for(
-    const mot of mots
-  ){
+input.value="";
 
-    if(
-      /^[A-Z]+$/.test(mot) &&
-      mot.length<=3
-    ){
-
-      resultat+=mot;
-
-      continue;
-    }
-
-
-    if(
-      /^[0-9]+$/.test(mot)
-    ){
-
-      resultat+=mot;
-
-      continue;
-    }
-
-
-    if(
-      nombres[mot]
-    ){
-
-      const nombre=
-        nombres[mot];
-
-      if(
-        nombre.length<=2
-      ){
-
-        resultat+=nombre;
-      }
-
-    }
-
-  }
-
-
-  /*
-   * Recherche dans le résultat.
-   */
-
-  const correspondance=
-    resultat
-      .replace(
-        /[^A-Z0-9]/g,
-        ""
-      )
-      .match(
-        /[A-Z]{2}[0-9]{3}[A-Z]{2}/
-      );
-
-
-  if(correspondance){
-
-    return formaterPlaque(
-      correspondance[0]
-    );
-
-  }
-
-
-  /*
-   * Dernière tentative :
-   * caractères individuels.
-   */
-
-  const caracteres=
-    resultat.match(
-      /[A-Z0-9]/g
-    ) || [];
-
-
-  if(
-    caracteres.length>=7
-  ){
-
-    for(
-      let debut=0;
-      debut<=
-        caracteres.length-7;
-      debut++
-    ){
-
-      const sept=
-        caracteres
-          .slice(
-            debut,
-            debut+7
-          )
-          .join("");
-
-      if(
-        /^[A-Z]{2}[0-9]{3}[A-Z]{2}$/
-          .test(sept)
-      ){
-
-        return formaterPlaque(
-          sept
-        );
-
-      }
-
-    }
-
-  }
-
-
-  return null;
 }
 
 
-/* =========================================================
-   FORMAT PLAQUE
-========================================================= */
-
-function formaterPlaque(
-  plaque
-){
-
-  plaque=
-    plaque
-      .toUpperCase()
-      .replace(
-        /[^A-Z0-9]/g,
-        ""
-      );
-
-  if(
-    !/^[A-Z]{2}[0-9]{3}[A-Z]{2}$/
-      .test(plaque)
-  ){
-
-    return null;
-  }
-
-  return(
-    plaque.substring(0,2)+
-    "-"+
-    plaque.substring(2,5)+
-    "-"+
-    plaque.substring(5,7)
-  );
-}
-
-
-/* =========================================================
+/* =====================================================
    OCR
-========================================================= */
+===================================================== */
 
-function chargerImage(
-  fichier
-){
+function chargerImage(fichier){
 
-  return new Promise(
-    (resolve,reject)=>{
+return new Promise(
+(resolve,reject)=>{
 
-      const reader=
-        new FileReader();
+const reader=
+new FileReader();
 
-      reader.onload=e=>{
+reader.onload=e=>{
 
-        const img=
-          new Image();
+const img=
+new Image();
 
-        img.onload=()=>
-          resolve(img);
+img.onload=()=>
+resolve(img);
 
-        img.onerror=reject;
+img.onerror=reject;
 
-        img.src=
-          e.target.result;
+img.src=e.target.result;
 
-      };
+};
 
-      reader.onerror=reject;
+reader.onerror=reject;
 
-      reader.readAsDataURL(
-        fichier
-      );
+reader.readAsDataURL(
+fichier
+);
 
-    }
-  );
+});
 }
 
 
-function creerImagesPourOCR(
-  img
+function creerImagesPourOCR(img){
+
+const largeur=1600;
+
+const ratio=
+largeur/img.width;
+
+const hauteur=
+Math.round(
+img.height*ratio
+);
+
+const canvas=
+document.createElement(
+"canvas"
+);
+
+canvas.width=largeur;
+
+canvas.height=hauteur;
+
+const ctx=
+canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0,
+largeur,
+hauteur
+);
+
+const original=
+canvas.toDataURL(
+"image/jpeg",
+.95
+);
+
+const gris=
+document.createElement(
+"canvas"
+);
+
+gris.width=largeur;
+
+gris.height=hauteur;
+
+const g=
+gris.getContext("2d");
+
+g.drawImage(
+img,
+0,
+0,
+largeur,
+hauteur
+);
+
+const data=
+g.getImageData(
+0,
+0,
+largeur,
+hauteur
+);
+
+for(
+let i=0;
+i<data.data.length;
+i+=4
 ){
 
-  const largeur=1600;
+const r=data.data[i];
 
-  const ratio=
-    largeur/img.width;
+const v=data.data[i+1];
 
-  const hauteur=
-    Math.round(
-      img.height*ratio
-    );
+const b=data.data[i+2];
 
+let valeur=
+.299*r+
+.587*v+
+.114*b;
 
-  const canvas=
-    document.createElement(
-      "canvas"
-    );
+valeur=
+(valeur-128)*1.6+
+128;
 
-  canvas.width=largeur;
+valeur=
+Math.max(
+0,
+Math.min(
+255,
+valeur
+)
+);
 
-  canvas.height=hauteur;
+data.data[i]=valeur;
+data.data[i+1]=valeur;
+data.data[i+2]=valeur;
 
-  const ctx=
-    canvas.getContext("2d");
+}
 
-  ctx.drawImage(
-    img,
-    0,
-    0,
-    largeur,
-    hauteur
-  );
+g.putImageData(
+data,
+0,
+0
+);
 
+const noirBlanc=
+document.createElement(
+"canvas"
+);
 
-  const original=
-    canvas.toDataURL(
-      "image/jpeg",
-      .95
-    );
+noirBlanc.width=largeur;
 
+noirBlanc.height=hauteur;
 
-  const gris=
-    document.createElement(
-      "canvas"
-    );
+const n=
+noirBlanc.getContext("2d");
 
-  gris.width=largeur;
+n.drawImage(
+gris,
+0,
+0
+);
 
-  gris.height=hauteur;
+const d=
+n.getImageData(
+0,
+0,
+largeur,
+hauteur
+);
 
-  const g=
-    gris.getContext("2d");
+for(
+let i=0;
+i<d.data.length;
+i+=4
+){
 
-  g.drawImage(
-    img,
-    0,
-    0,
-    largeur,
-    hauteur
-  );
+const valeur=d.data[i];
 
+const resultat=
+valeur>145
+?255
+:0;
 
-  const data=
-    g.getImageData(
-      0,
-      0,
-      largeur,
-      hauteur
-    );
+d.data[i]=resultat;
+d.data[i+1]=resultat;
+d.data[i+2]=resultat;
 
+}
 
-  for(
-    let i=0;
-    i<data.data.length;
-    i+=4
-  ){
+n.putImageData(
+d,
+0,
+0
+);
 
-    const r=data.data[i];
+return[
+original,
+gris.toDataURL(
+"image/jpeg",
+.95
+),
+noirBlanc.toDataURL(
+"image/jpeg",
+.95
+)
+];
 
-    const v=data.data[i+1];
-
-    const b=data.data[i+2];
-
-    let grisVal=
-      .299*r+
-      .587*v+
-      .114*b;
-
-    grisVal=
-      (grisVal-128)*1.6+
-      128;
-
-    grisVal=
-      Math.max(
-        0,
-        Math.min(
-          255,
-          grisVal
-        )
-      );
-
-    data.data[i]=grisVal;
-
-    data.data[i+1]=grisVal;
-
-    data.data[i+2]=grisVal;
-
-  }
-
-
-  g.putImageData(
-    data,
-    0,
-    0
-  );
-
-
-  const noirBlanc=
-    document.createElement(
-      "canvas"
-    );
-
-  noirBlanc.width=largeur;
-
-  noirBlanc.height=hauteur;
-
-  const n=
-    noirBlanc.getContext("2d");
-
-  n.drawImage(
-    gris,
-    0,
-    0
-  );
-
-
-  const d=
-    n.getImageData(
-      0,
-      0,
-      largeur,
-      hauteur
-    );
-
-
-  for(
-    let i=0;
-    i<d.data.length;
-    i+=4
-  ){
-
-    const valeur=
-      d.data[i];
-
-    const resultat=
-      valeur>145
-      ?255
-      :0;
-
-    d.data[i]=resultat;
-
-    d.data[i+1]=resultat;
-
-    d.data[i+2]=resultat;
-
-  }
-
-
-  n.putImageData(
-    d,
-    0,
-    0
-  );
-
-
-  return[
-
-    original,
-
-    gris.toDataURL(
-      "image/jpeg",
-      .95
-    ),
-
-    noirBlanc.toDataURL(
-      "image/jpeg",
-      .95
-    )
-
-  ];
 }
 
 
-async function reconnaitreTexte(
-  image
-){
+async function reconnaitreTexte(image){
 
-  const worker=
-    await Tesseract.createWorker(
-      "eng"
-    );
+const worker=
+await Tesseract.createWorker(
+"eng"
+);
 
-  await worker.setParameters({
+await worker.setParameters({
 
-    tessedit_char_whitelist:
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+tessedit_char_whitelist:
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
 
-    tessedit_pageseg_mode:
-      "7"
+tessedit_pageseg_mode:
+"7"
 
-  });
+});
 
+const resultat=
+await worker.recognize(
+image
+);
 
-  const resultat=
-    await worker.recognize(
-      image
-    );
+const texte=
+resultat.data.text||"";
 
+await worker.terminate();
 
-  const texte=
-    resultat.data.text||"";
+return texte.toUpperCase();
 
-
-  await worker.terminate();
-
-
-  return texte.toUpperCase();
 }
 
 
-function extraireImmatriculation(
-  texte
-){
+function extraireImmatriculation(texte){
 
-  const propre=
-    texte
-      .toUpperCase()
-      .replace(
-        /[^A-Z0-9]/g,
-        ""
-      );
+const propre=
+texte
+.toUpperCase()
+.replace(
+/[^A-Z0-9]/g,
+""
+);
 
+const correspondance=
+propre.match(
+/[A-Z]{2}[0-9]{3}[A-Z]{2}/
+);
 
-  const correspondance=
-    propre.match(
-      /[A-Z]{2}[0-9]{3}[A-Z]{2}/
-    );
+if(!correspondance)return null;
 
+return formaterPlaque(
+correspondance[0]
+);
 
-  if(!correspondance)return null;
-
-
-  return formaterPlaque(
-    correspondance[0]
-  );
 }
 
 
-/* =========================================================
-   FORMAT CHAMP
-========================================================= */
+/* =====================================================
+   FORMAT IMMATRICULATION
+===================================================== */
 
-function formatImmatriculation(
-  input
-){
+function formatImmatriculation(input){
 
-  let valeur=
-    input.value
-      .toUpperCase()
-      .replace(
-        /[^A-Z0-9]/g,
-        ""
-      )
-      .substring(0,7);
+let valeur=
+input.value
+.toUpperCase()
+.replace(
+/[^A-Z0-9]/g,
+""
+)
+.substring(0,7);
 
+if(valeur.length>2){
 
-  if(valeur.length>2){
+valeur=
+valeur.substring(0,2)+
+"-"+
+valeur.substring(2);
 
-    valeur=
-      valeur.substring(0,2)+
-      "-"+
-      valeur.substring(2);
+}
 
-  }
+if(valeur.length>6){
 
+valeur=
+valeur.substring(0,6)+
+"-"+
+valeur.substring(6);
 
-  if(valeur.length>6){
+}
 
-    valeur=
-      valeur.substring(0,6)+
-      "-"+
-      valeur.substring(6);
+input.value=valeur;
 
-  }
-
-
-  input.value=valeur;
 }
 
 
-function nettoyerImmatriculation(
-  valeur
+function formaterPlaque(plaque){
+
+plaque=
+plaque
+.toUpperCase()
+.replace(
+/[^A-Z0-9]/g,
+""
+);
+
+if(
+!/^[A-Z]{2}[0-9]{3}[A-Z]{2}$/
+.test(plaque)
 ){
 
-  valeur=
-    valeur
-      .toUpperCase()
-      .replace(
-        /[^A-Z0-9]/g,
-        ""
-      )
-      .substring(0,7);
+return null;
 
+}
 
-  if(valeur.length>2){
+return(
+plaque.substring(0,2)+
+"-"+
+plaque.substring(2,5)+
+"-"+
+plaque.substring(5,7)
+);
 
-    valeur=
-      valeur.substring(0,2)+
-      "-"+
-      valeur.substring(2);
-
-  }
-
-
-  if(valeur.length>6){
-
-    valeur=
-      valeur.substring(0,6)+
-      "-"+
-      valeur.substring(6);
-
-  }
-
-
-  return valeur;
 }
 
 
-/* =========================================================
-   VÉHICULES
-========================================================= */
+function nettoyerImmatriculation(valeur){
+
+valeur=
+valeur
+.toUpperCase()
+.replace(
+/[^A-Z0-9]/g,
+""
+)
+.substring(0,7);
+
+if(valeur.length>2){
+
+valeur=
+valeur.substring(0,2)+
+"-"+
+valeur.substring(2);
+
+}
+
+if(valeur.length>6){
+
+valeur=
+valeur.substring(0,6)+
+"-"+
+valeur.substring(6);
+
+}
+
+return valeur;
+
+}
+
+
+/* =====================================================
+   AJOUTER VÉHICULE
+===================================================== */
 
 function ajouterVehicule(){
 
-  const input=
-    document.getElementById(
-      "immatriculation"
-    );
+const input=
+document.getElementById(
+"immatriculation"
+);
 
+const immatriculation=
+nettoyerImmatriculation(
+input.value
+);
 
-  const immatriculation=
-    nettoyerImmatriculation(
-      input.value
-    );
+if(!immatriculation){
 
+alert(
+"Merci de saisir l'immatriculation."
+);
 
-  if(!immatriculation){
+return;
 
-    alert(
-      "Merci de saisir ou dicter une immatriculation."
-    );
-
-    return;
-  }
-
-
-  if(
-    immatriculation
-      .replace(
-        /-/g,
-        ""
-      )
-      .length!==7
-  ){
-
-    alert(
-      "L'immatriculation doit contenir 7 caractères."
-    );
-
-    return;
-  }
-
-
-  if(
-    vehicules.some(
-      v=>
-        v.immatriculation===
-        immatriculation
-    )
-  ){
-
-    alert(
-      "Ce véhicule existe déjà."
-    );
-
-    return;
-  }
-
-
-  vehicules.push({
-
-    id:Date.now(),
-
-    immatriculation:
-      immatriculation,
-
-    photos:[]
-
-  });
-
-
-  sauvegarderVehicules();
-
-  input.value="";
-
-  afficherVehicules();
 }
 
+if(
+immatriculation
+.replace(/-/g,"")
+.length!==7
+){
+
+alert(
+"L'immatriculation doit contenir 7 caractères."
+);
+
+return;
+
+}
+
+if(
+vehicules.some(
+v=>
+v.immatriculation===
+immatriculation
+)
+){
+
+alert(
+"Ce véhicule existe déjà."
+);
+
+return;
+
+}
+
+vehicules.push({
+
+id:Date.now(),
+
+immatriculation:
+immatriculation,
+
+photos:[]
+
+});
+
+sauvegarderVehicules();
+
+input.value="";
+
+afficherVehicules();
+
+}
+
+
+/* =====================================================
+   SAUVEGARDE
+===================================================== */
 
 function sauvegarderVehicules(){
 
-  localStorage.setItem(
-    "atelierCarrosserieVehicules",
-    JSON.stringify(
-      vehicules
-    )
-  );
-}
+localStorage.setItem(
+"atelierCarrosserieVehicules",
+JSON.stringify(
+vehicules
+)
+);
 
+
+/* =====================================================
+   AFFICHER VÉHICULES
+===================================================== */
+
+}
 
 function afficherVehicules(){
 
-  const container=
-    document.getElementById(
-      "listeVehicules"
-    );
+const container=
+document.getElementById(
+"listeVehicules"
+);
 
+container.innerHTML="";
 
-  container.innerHTML="";
+if(vehicules.length===0){
 
+container.innerHTML=
+'<div class="empty">'+
+'Aucun véhicule enregistré.'+
+'</div>';
 
-  if(
-    vehicules.length===0
-  ){
+return;
 
-    container.innerHTML=
-      '<div class="empty">'+
-      'Aucun véhicule enregistré.'+
-      '</div>';
+}
 
-    return;
-  }
+vehicules.forEach(
+vehicle=>{
 
+const div=
+document.createElement(
+"div"
+);
 
-  vehicules.forEach(
-    vehicle=>{
+div.className="vehicle";
 
-      const div=
-        document.createElement(
-          "div"
-        );
+div.innerHTML=`
 
-      div.className="vehicle";
+<div class="vehicle-title">
+🚗 ${vehicle.immatriculation}
+</div>
 
+<label
+class="primary"
+style="
+display:block;
+text-align:center;
+margin-bottom:8px;
+">
 
-      div.innerHTML=`
+📷 Ajouter une photo
 
-        <div class="vehicle-title">
-          🚗 ${vehicle.immatriculation}
-        </div>
+<input
+type="file"
+class="file-input"
+accept="image/*"
+capture="environment"
+onchange="ajouterPhoto(
+${vehicle.id},
+this
+)">
 
-        <label
-          class="primary"
-          style="
-            display:block;
-            text-align:center;
-            margin-bottom:8px;
-          "
-        >
+</label>
 
-          📷 Ajouter une photo
+<div
+class="photos"
+id="photos-${vehicle.id}">
+</div>
 
-          <input
-            type="file"
-            class="file-input"
-            accept="image/*"
-            capture="environment"
-            onchange="ajouterPhoto(
-              ${vehicle.id},
-              this
-            )"
-          >
+<div class="share-buttons">
 
-        </label>
+<button
+class="green"
+onclick="preparerEmail(
+${vehicle.id}
+)">
+✉️ Préparer l'e-mail
+</button>
 
+<button
+class="orange"
+onclick="partagerPhotos(
+${vehicle.id}
+)">
+📸 Partager les photos
+</button>
 
-        <div
-          class="photos"
-          id="photos-${vehicle.id}"
-        ></div>
+<button
+class="red"
+onclick="supprimerVehicule(
+${vehicle.id}
+)">
+🗑️ Supprimer le véhicule
+</button>
 
+</div>
+`;
 
-        <div class="share-buttons">
+container.appendChild(div);
 
-          <button
-            class="green"
-            onclick="preparerEmail(
-              ${vehicle.id}
-            )"
-          >
-            ✉️ Préparer l'e-mail
-          </button>
+afficherPhotos(vehicle);
 
+});
 
-          <button
-            class="orange"
-            onclick="partagerPhotos(
-              ${vehicle.id}
-            )"
-          >
-            📸 Partager les photos
-          </button>
-
-
-          <button
-            class="red"
-            onclick="supprimerVehicule(
-              ${vehicle.id}
-            )"
-          >
-            🗑️ Supprimer le véhicule
-          </button>
-
-        </div>
-      `;
-
-
-      container.appendChild(div);
-
-      afficherPhotos(vehicle);
-
-    }
-  );
 }
 
 
-/* =========================================================
-   AJOUT PHOTO
-========================================================= */
+/* =====================================================
+   PHOTOS
+===================================================== */
 
 function ajouterPhoto(
-  vehicleId,
-  input
+vehicleId,
+input
 ){
 
-  const fichier=
-    input.files[0];
+const fichier=
+input.files[0];
 
-  if(!fichier)return;
+if(!fichier)return;
 
+const reader=
+new FileReader();
 
-  const reader=
-    new FileReader();
+reader.onload=
+function(event){
 
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
 
-  reader.onload=
-    function(event){
+if(!vehicle)return;
 
-      const vehicle=
-        vehicules.find(
-          v=>v.id===vehicleId
-        );
+vehicle.photos.push({
 
+image:
+event.target.result,
 
-      if(!vehicle)return;
+commentaire:""
 
+});
 
-      vehicle.photos.push({
+sauvegarderVehicules();
 
-        image:
-          event.target.result,
+afficherVehicules();
 
-        commentaire:""
+setTimeout(
+function(){
 
-      });
+ouvrirCommentairePhoto(
+vehicle.id,
+vehicle.photos.length-1
+);
 
+},
+300
+);
 
-      sauvegarderVehicules();
+};
 
-      afficherVehicules();
+reader.readAsDataURL(
+fichier
+);
 
+input.value="";
 
-      /*
-       * On demande immédiatement
-       * si l'utilisateur veut dicter
-       * le commentaire.
-       */
-
-      setTimeout(
-        function(){
-
-          dicterCommentaire(
-            vehicle.id,
-            vehicle.photos.length-1
-          );
-
-        },
-        300
-      );
-
-    };
-
-
-  reader.readAsDataURL(
-    fichier
-  );
-
-  input.value="";
 }
 
 
-/* =========================================================
+/* =====================================================
    AFFICHER PHOTOS
-========================================================= */
+===================================================== */
 
-function afficherPhotos(
-  vehicle
-){
+function afficherPhotos(vehicle){
 
-  const container=
-    document.getElementById(
-      "photos-"+vehicle.id
-    );
+const container=
+document.getElementById(
+"photos-"+vehicle.id
+);
 
+if(!container)return;
 
-  if(!container)return;
+container.innerHTML="";
 
+vehicle.photos.forEach(
+(photo,index)=>{
 
-  container.innerHTML="";
+if(typeof photo==="string"){
 
+photo={
+image:photo,
+commentaire:""
+};
 
-  vehicle.photos.forEach(
-    (photo,index)=>{
+vehicle.photos[index]=photo;
 
-      if(typeof photo==="string"){
-
-        photo={
-          image:photo,
-          commentaire:""
-        };
-
-        vehicle.photos[index]=
-          photo;
-      }
-
-
-      const div=
-        document.createElement(
-          "div"
-        );
-
-
-      div.className=
-        "photo-box";
-
-
-      const commentaire=
-        photo.commentaire||"";
-
-
-      div.innerHTML=`
-
-        <img
-          src="${photo.image}"
-          alt="Photo du véhicule"
-        >
-
-
-        <button
-          class="delete-photo"
-          onclick="supprimerPhoto(
-            ${vehicle.id},
-            ${index}
-          )"
-        >
-          ×
-        </button>
-
-
-        <div class="photo-comment">
-
-          ${
-            commentaire
-            ?
-            "📝 "+
-            escapeHTML(
-              commentaire
-            )
-            :
-            '<span class="photo-comment-empty">'+
-            'Aucun commentaire'+
-            '</span>'
-          }
-
-        </div>
-
-
-        <div class="comment-buttons">
-
-          <button
-            class="voice"
-            onclick="dicterCommentaire(
-              ${vehicle.id},
-              ${index}
-            )"
-          >
-
-            🎙️ ${
-              commentaire
-              ?
-              "Modifier le commentaire"
-              :
-              "Commenter cette photo"
-            }
-
-          </button>
-
-
-          ${
-            commentaire
-            ?
-            `
-            <button
-              class="gray"
-              onclick="modifierCommentaire(
-                ${vehicle.id},
-                ${index}
-              )"
-            >
-              ✏️ Modifier le texte
-            </button>
-            `
-            :
-            ""
-          }
-
-        </div>
-
-      `;
-
-
-      container.appendChild(div);
-
-    }
-  );
 }
 
+const div=
+document.createElement(
+"div"
+);
 
-/* =========================================================
-   DICTÉE COMMENTAIRE PHOTO
-========================================================= */
+div.className="photo-box";
 
-function dicterCommentaire(
-  vehicleId,
-  photoIndex
-){
+const commentaire=
+photo.commentaire||"";
 
-  const SpeechRecognition=
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+div.innerHTML=`
 
+<img
+src="${photo.image}"
+alt="Photo du véhicule">
 
-  if(!SpeechRecognition){
+<button
+class="delete-photo"
+onclick="supprimerPhoto(
+${vehicle.id},
+${index}
+)">
+×
+</button>
 
-    const commentaire=
-      prompt(
-        "Écris le commentaire de la photo :"
-      );
+<div class="photo-comment">
 
+${
+commentaire
+?
+"📝 "+
+escapeHTML(commentaire)
+:
+'<span class="photo-comment-empty">'+
+'Aucun commentaire'+
+'</span>'
+}
 
-    if(commentaire!==null){
+</div>
 
-      enregistrerCommentaire(
-        vehicleId,
-        photoIndex,
-        commentaire
-      );
+<div class="comment-buttons">
 
-    }
+<button
+class="voice"
+onclick="ouvrirCommentairePhoto(
+${vehicle.id},
+${index}
+)">
+🎙️ ${
+commentaire
+?
+"Modifier le commentaire"
+:
+"Commenter cette photo"
+}
+</button>
 
-    return;
-  }
+</div>
 
+`;
 
-  const recognition=
-    new SpeechRecognition();
+div.innerHTML+=`
 
+<button
+class="gray"
+style="width:calc(100% - 16px);margin:8px;"
+onclick="modifierCommentaire(
+${vehicle.id},
+${index}
+)">
+✏️ Modifier le texte
+</button>
 
-  recognition.lang=
-    "fr-FR";
+`;
 
-  recognition.continuous=
-    false;
+container.appendChild(div);
 
-  recognition.interimResults=
-    false;
-
-  recognition.maxAlternatives=
-    1;
-
-
-  recognition.onstart=
-    function(){
-
-      alert(
-        "🎙️ Parle maintenant pour commenter cette photo."
-      );
-
-    };
-
-
-  recognition.onresult=
-    function(event){
-
-      const texte=
-        event
-          .results[0][0]
-          .transcript;
-
-
-      if(!texte)return;
-
-
-      const commentaire=
-        prompt(
-          "Vérifie le commentaire avant de l'enregistrer :",
-          texte
-        );
-
-
-      if(commentaire!==null){
-
-        enregistrerCommentaire(
-          vehicleId,
-          photoIndex,
-          commentaire
-        );
-
-      }
-
-    };
-
-
-  recognition.onerror=
-    function(event){
-
-      console.log(
-        "Erreur dictée commentaire :",
-        event
-      );
-
-      alert(
-        "❌ Je n'ai pas compris le commentaire. Réessaie."
-      );
-
-    };
-
-
-  try{
-
-    recognition.start();
-
-  }catch(erreur){
-
-    console.log(erreur);
-
-  }
+});
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   COMMENTAIRE PHOTO AVEC CLAVIER IPHONE
+===================================================== */
+
+function ouvrirCommentairePhoto(
+vehicleId,
+photoIndex
+){
+
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
+
+if(!vehicle)return;
+
+const photo=
+vehicle.photos[photoIndex];
+
+if(!photo)return;
+
+
+/*
+ * On crée une petite fenêtre
+ * directement dans la page.
+ */
+
+const overlay=
+document.createElement(
+"div"
+);
+
+overlay.style.position="fixed";
+overlay.style.left="0";
+overlay.style.top="0";
+overlay.style.right="0";
+overlay.style.bottom="0";
+overlay.style.background="rgba(0,0,0,.5)";
+overlay.style.zIndex="9999";
+overlay.style.padding="20px";
+overlay.style.display="flex";
+overlay.style.alignItems="center";
+overlay.style.justifyContent="center";
+
+
+const box=
+document.createElement(
+"div"
+);
+
+box.style.background="white";
+box.style.borderRadius="15px";
+box.style.padding="15px";
+box.style.width="100%";
+box.style.maxWidth="500px";
+
+
+box.innerHTML=`
+
+<h2>📝 Commentaire photo</h2>
+
+<div class="tip">
+Appuie sur 🎙️ le micro du clavier
+de l'iPhone pour dicter ton commentaire.
+</div>
+
+<textarea
+id="commentaireTemporaire"
+placeholder="Exemple : aile avant gauche rayée"
+>${escapeHTML(
+photo.commentaire||""
+)}</textarea>
+
+<button
+class="green"
+style="width:100%;"
+id="boutonValiderCommentaire">
+✅ Enregistrer
+</button>
+
+<button
+class="gray"
+style="width:100%;"
+id="boutonAnnulerCommentaire">
+Annuler
+</button>
+
+`;
+
+overlay.appendChild(box);
+
+document.body.appendChild(
+overlay
+);
+
+
+const textarea=
+document.getElementById(
+"commentaireTemporaire"
+);
+
+textarea.focus();
+
+textarea.setSelectionRange(
+textarea.value.length,
+textarea.value.length
+);
+
+
+document.getElementById(
+"boutonValiderCommentaire"
+).onclick=function(){
+
+enregistrerCommentaire(
+vehicleId,
+photoIndex,
+textarea.value
+);
+
+overlay.remove();
+
+};
+
+
+document.getElementById(
+"boutonAnnulerCommentaire"
+).onclick=function(){
+
+overlay.remove();
+
+};
+
+}
+
+
+/* =====================================================
    ENREGISTRER COMMENTAIRE
-========================================================= */
+===================================================== */
 
 function enregistrerCommentaire(
-  vehicleId,
-  photoIndex,
-  commentaire
+vehicleId,
+photoIndex,
+commentaire
 ){
 
-  const vehicle=
-    vehicules.find(
-      v=>v.id===vehicleId
-    );
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
 
+if(!vehicle)return;
 
-  if(!vehicle)return;
+if(!vehicle.photos[photoIndex])
+return;
 
+vehicle.photos[photoIndex]
+.commentaire=
+commentaire.trim();
 
-  if(!vehicle.photos[photoIndex])
-    return;
+sauvegarderVehicules();
 
+afficherVehicules();
 
-  vehicle
-    .photos[photoIndex]
-    .commentaire=
-      commentaire.trim();
-
-
-  sauvegarderVehicules();
-
-  afficherVehicules();
 }
 
 
-/* =========================================================
+/* =====================================================
    MODIFIER COMMENTAIRE
-========================================================= */
+===================================================== */
 
 function modifierCommentaire(
-  vehicleId,
-  photoIndex
+vehicleId,
+photoIndex
 ){
 
-  const vehicle=
-    vehicules.find(
-      v=>v.id===vehicleId
-    );
+ouvrirCommentairePhoto(
+vehicleId,
+photoIndex
+);
 
-
-  if(!vehicle)return;
-
-
-  const ancien=
-    vehicle
-      .photos[photoIndex]
-      .commentaire||"";
-
-
-  const nouveau=
-    prompt(
-      "Modifier le commentaire :",
-      ancien
-    );
-
-
-  if(nouveau===null)return;
-
-
-  enregistrerCommentaire(
-    vehicleId,
-    photoIndex,
-    nouveau
-  );
 }
 
 
-/* =========================================================
-   SÉCURITÉ TEXTE
-========================================================= */
-
-function escapeHTML(
-  texte
-){
-
-  return String(texte)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-}
-
-
-/* =========================================================
+/* =====================================================
    SUPPRIMER PHOTO
-========================================================= */
+===================================================== */
 
 function supprimerPhoto(
-  vehicleId,
-  photoIndex
+vehicleId,
+photoIndex
 ){
 
-  const vehicle=
-    vehicules.find(
-      v=>v.id===vehicleId
-    );
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
 
+if(!vehicle)return;
 
-  if(!vehicle)return;
+vehicle.photos.splice(
+photoIndex,
+1
+);
 
+sauvegarderVehicules();
 
-  vehicle.photos.splice(
-    photoIndex,
-    1
-  );
+afficherVehicules();
 
-
-  sauvegarderVehicules();
-
-  afficherVehicules();
 }
 
 
-/* =========================================================
+/* =====================================================
    SUPPRIMER VÉHICULE
-========================================================= */
+===================================================== */
 
 function supprimerVehicule(
-  vehicleId
+vehicleId
 ){
 
-  const vehicle=
-    vehicules.find(
-      v=>v.id===vehicleId
-    );
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
 
+if(!vehicle)return;
 
-  if(!vehicle)return;
+if(
+!confirm(
+"Supprimer le véhicule "+
+vehicle.immatriculation+
+" et toutes ses photos ?"
+)
+)return;
 
+vehicules=
+vehicules.filter(
+v=>v.id!==vehicleId
+);
 
-  if(
-    !confirm(
-      "Supprimer le véhicule "+
-      vehicle.immatriculation+
-      " et toutes ses photos ?"
-    )
-  )return;
+sauvegarderVehicules();
 
+afficherVehicules();
 
-  vehicules=
-    vehicules.filter(
-      v=>v.id!==vehicleId
-    );
-
-
-  sauvegarderVehicules();
-
-  afficherVehicules();
 }
 
 
-/* =========================================================
+/* =====================================================
+   SÉCURITÉ TEXTE
+===================================================== */
+
+function escapeHTML(texte){
+
+return String(texte)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
    EMAILS
-========================================================= */
+===================================================== */
 
 function ajouterEmail(){
 
-  const input=
-    document.getElementById(
-      "nouvelEmail"
-    );
+const input=
+document.getElementById(
+"nouvelEmail"
+);
 
+const email=
+input.value
+.trim()
+.toLowerCase();
 
-  const email=
-    input.value
-      .trim()
-      .toLowerCase();
+if(!email){
 
+alert(
+"Merci de saisir une adresse e-mail."
+);
 
-  if(!email){
+return;
 
-    alert(
-      "Merci de saisir une adresse e-mail."
-    );
+}
 
-    return;
-  }
+if(!email.includes("@")){
 
+alert(
+"Cette adresse e-mail semble incorrecte."
+);
 
-  if(!email.includes("@")){
+return;
 
-    alert(
-      "Cette adresse e-mail semble incorrecte."
-    );
+}
 
-    return;
-  }
+if(emails.includes(email)){
 
+alert(
+"Cette adresse existe déjà."
+);
 
-  if(
-    emails.includes(email)
-  ){
+return;
 
-    alert(
-      "Cette adresse existe déjà."
-    );
+}
 
-    return;
-  }
+emails.push(email);
 
+sauvegarderEmails();
 
-  emails.push(email);
+input.value="";
 
-  sauvegarderEmails();
+afficherEmails();
 
-  input.value="";
-
-  afficherEmails();
 }
 
 
 function sauvegarderEmails(){
 
-  localStorage.setItem(
-    "atelierCarrosserieEmails",
-    JSON.stringify(
-      emails
-    )
-  );
+localStorage.setItem(
+"atelierCarrosserieEmails",
+JSON.stringify(
+emails
+)
+);
+
+
 }
 
+
+/* =====================================================
+   AFFICHER EMAILS
+===================================================== */
 
 function afficherEmails(){
 
-  const container=
-    document.getElementById(
-      "listeEmails"
-    );
+const container=
+document.getElementById(
+"listeEmails"
+);
 
+container.innerHTML="";
 
-  container.innerHTML="";
+if(emails.length===0){
 
+container.innerHTML=
+'<div class="empty">'+
+'Aucune adresse enregistrée.'+
+'</div>';
 
-  if(
-    emails.length===0
-  ){
+return;
 
-    container.innerHTML=
-      '<div class="empty">'+
-      'Aucune adresse enregistrée.'+
-      '</div>';
+}
 
-    return;
-  }
+emails.forEach(
+(email,index)=>{
 
+const div=
+document.createElement(
+"div"
+);
 
-  emails.forEach(
-    (email,index)=>{
+div.className=
+"email-row";
 
-      const div=
-        document.createElement(
-          "div"
-        );
+div.innerHTML=`
 
+<label>
 
-      div.className=
-        "email-row";
+<input
+type="checkbox"
+class="email-checkbox"
+value="${escapeHTML(email)}">
 
+${escapeHTML(email)}
 
-      div.innerHTML=`
+</label>
 
-        <label>
+<button
+class="small-delete"
+onclick="supprimerEmail(
+${index}
+)">
+Supprimer
+</button>
 
-          <input
-            type="checkbox"
-            class="email-checkbox"
-            value="${escapeHTML(email)}"
-          >
+`;
 
-          ${escapeHTML(email)}
+container.appendChild(div);
 
-        </label>
+});
 
-
-        <button
-          class="small-delete"
-          onclick="supprimerEmail(
-            ${index}
-          )"
-        >
-          Supprimer
-        </button>
-
-      `;
-
-
-      container.appendChild(div);
-
-    }
-  );
 }
 
 
-function supprimerEmail(
-  index
-){
+/* =====================================================
+   SUPPRIMER EMAIL
+===================================================== */
 
-  emails.splice(
-    index,
-    1
-  );
+function supprimerEmail(index){
 
-  sauvegarderEmails();
+emails.splice(
+index,
+1
+);
 
-  afficherEmails();
+sauvegarderEmails();
+
+afficherEmails();
+
 }
 
 
-/* =========================================================
-   EMAIL
-========================================================= */
+/* =====================================================
+   PRÉPARER EMAIL
+===================================================== */
 
 function preparerEmail(
-  vehicleId
+vehicleId
 ){
 
-  const vehicle=
-    vehicules.find(
-      v=>v.id===vehicleId
-    );
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
 
+if(!vehicle)return;
 
-  if(!vehicle)return;
+const cases=
+document.querySelectorAll(
+".email-checkbox:checked"
+);
 
+if(cases.length===0){
 
-  const cases=
-    document.querySelectorAll(
-      ".email-checkbox:checked"
-    );
+alert(
+"Sélectionne au moins une adresse e-mail."
+);
 
+return;
 
-  if(
-    cases.length===0
-  ){
+}
 
-    alert(
-      "Sélectionne au moins une adresse e-mail."
-    );
+const destinataires=
+Array.from(cases)
+.map(
+c=>c.value
+)
+.join(",");
 
-    return;
-  }
+const sujet=
+"Photos véhicule "+
+vehicle.immatriculation;
 
+let corps=
+"Bonjour,\n\n"+
+"Veuillez trouver les photos du véhicule "+
+vehicle.immatriculation+
+".\n\n";
 
-  const destinataires=
-    Array.from(cases)
-      .map(
-        c=>c.value
-      )
-      .join(",");
+vehicle.photos.forEach(
+(photo,index)=>{
 
+if(photo.commentaire){
 
-  const sujet=
-    "Photos véhicule "+
-    vehicle.immatriculation;
+corps+=
+"Photo "+
+(index+1)+
+" : "+
+photo.commentaire+
+"\n";
 
+}
 
-  let corps=
-    "Bonjour,\n\n"+
-    "Veuillez trouver les photos du véhicule "+
-    vehicle.immatriculation+
-    ".\n\n";
+});
 
+corps+=
+"\nCordialement,\n"+
+"Atelier Carrosserie Sébie";
 
-  vehicle.photos.forEach(
-    (photo,index)=>{
+window.location.href=
+"mailto:"+
+destinataires+
+"?subject="+
+encodeURIComponent(
+sujet
+)+
+"&body="+
+encodeURIComponent(
+corps
+);
 
-      if(photo.commentaire){
-
-        corps+=
-          "Photo "+
-          (index+1)+
-          " : "+
-          photo.commentaire+
-          "\n";
-      }
-
-    }
-  );
-
-
-  corps+=
-    "\nCordialement,\n"+
-    "Atelier Carrosserie Sébie";
-
-
-  window.location.href=
-    "mailto:"+
-    destinataires+
-    "?subject="+
-    encodeURIComponent(
-      sujet
-    )+
-    "&body="+
-    encodeURIComponent(
-      corps
-    );
 }
 
 
-/* =========================================================
+/* =====================================================
    PARTAGE PHOTOS
-========================================================= */
+===================================================== */
 
 async function partagerPhotos(
-  vehicleId
+vehicleId
 ){
 
-  const vehicle=
-    vehicules.find(
-      v=>v.id===vehicleId
-    );
+const vehicle=
+vehicules.find(
+v=>v.id===vehicleId
+);
 
+if(!vehicle)return;
 
-  if(!vehicle)return;
+if(vehicle.photos.length===0){
 
+alert(
+"Ce véhicule n'a aucune photo."
+);
 
-  if(
-    vehicle.photos.length===0
-  ){
+return;
 
-    alert(
-      "Ce véhicule n'a aucune photo."
-    );
+}
 
-    return;
-  }
+try{
 
+const fichiers=[];
 
-  try{
+for(
+let i=0;
+i<vehicle.photos.length;
+i++
+){
 
-    const fichiers=[];
+const response=
+await fetch(
+vehicle.photos[i].image
+);
 
+const blob=
+await response.blob();
 
-    for(
-      let i=0;
-      i<vehicle.photos.length;
-      i++
-    ){
+fichiers.push(
 
-      const response=
-        await fetch(
-          vehicle.photos[i].image
-        );
+new File(
+[blob],
 
+vehicle.immatriculation+
+"-"+
+(i+1)+
+".jpg",
 
-      const blob=
-        await response.blob();
+{
+type:
+blob.type||
+"image/jpeg"
+}
 
+)
 
-      fichiers.push(
+);
 
-        new File(
-          [blob],
+}
 
-          vehicle.immatriculation+
-          "-"+
-          (i+1)+
-          ".jpg",
+let texte=
+"Photos du véhicule "+
+vehicle.immatriculation;
 
-          {
-            type:
-              blob.type||
-              "image/jpeg"
-          }
-        )
+const commentaires=
+vehicle.photos
+.filter(
+p=>p.commentaire
+)
+.map(
+p=>p.commentaire
+);
 
-      );
+if(commentaires.length){
 
-    }
+texte+=
+"\n\n"+
+commentaires
+.map(
+(c,i)=>
+"Photo "+
+(i+1)+
+" : "+
+c
+)
+.join("\n");
 
+}
 
-    let texte=
-      "Photos du véhicule "+
-      vehicle.immatriculation;
+if(
+navigator.share &&
+navigator.canShare &&
+navigator.canShare({
+files:fichiers
+})
+){
 
+await navigator.share({
 
-    const commentaires=
-      vehicle.photos
-        .filter(
-          p=>p.commentaire
-        )
-        .map(
-          p=>p.commentaire
-        );
+title:
+"Photos "+
+vehicle.immatriculation,
 
+text:texte,
 
-    if(
-      commentaires.length
-    ){
+files:fichiers
 
-      texte+=
-        "\n\n"+
-        commentaires
-          .map(
-            (c,i)=>
-              "Photo "+
-              (i+1)+
-              " : "+
-              c
-          )
-          .join("\n");
+});
 
-    }
+}else if(
+navigator.share
+){
 
+await navigator.share({
 
-    if(
-      navigator.share &&
-      navigator.canShare &&
-      navigator.canShare({
-        files:fichiers
-      })
-    ){
+title:
+"Photos "+
+vehicle.immatriculation,
 
-      await navigator.share({
+text:texte
 
-        title:
-          "Photos "+
-          vehicle.immatriculation,
+});
 
-        text:texte,
+}else{
 
-        files:fichiers
+alert(
+"Le partage de fichiers n'est pas disponible sur cet appareil."
+);
 
-      });
+}
 
-    }else if(
-      navigator.share
-    ){
+}catch(error){
 
-      await navigator.share({
+console.log(error);
 
-        title:
-          "Photos "+
-          vehicle.immatriculation,
-
-        text:texte
-
-      });
-
-    }else{
-
-      alert(
-        "Le partage de fichiers n'est pas disponible sur cet appareil."
-      );
-
-    }
-
-
-  }catch(error){
-
-    console.log(error);
-
-  }
+}
 
 }
 
 
-/* =========================================================
+/* =====================================================
    DÉMARRAGE
-========================================================= */
+===================================================== */
 
 afficherEmails();
 
