@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atelier Carrosserie Sébie</title>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
 <style>
 *{box-sizing:border-box}
 
@@ -253,18 +251,14 @@ button{
 
 <div class="container">
 
-<!-- =====================================================
-     NOUVEAU VÉHICULE
-===================================================== -->
-
 <div class="card">
 
 <h2>➕ Nouveau véhicule</h2>
 
 <div class="info">
-📷 Tu peux scanner l'immatriculation.
+📷 Prends une photo nette de l'immatriculation.
 <br><br>
-🎙️ Ou utiliser le micro du clavier de l'iPhone.
+🎙️ Tu peux aussi utiliser le micro du clavier de l'iPhone.
 </div>
 
 <button
@@ -303,7 +297,7 @@ onclick="activerClavierImmatriculation()">
 </button>
 
 <div class="tip">
-Après avoir appuyé sur le bouton, appuie sur
+Après avoir appuyé sur le champ, utilise
 <strong>🎙️ le micro du clavier de l'iPhone</strong>
 et dis par exemple :
 <strong>« AB 123 CD »</strong>
@@ -317,10 +311,6 @@ onclick="ajouterVehicule()">
 
 </div>
 
-
-<!-- =====================================================
-     EMAILS
-===================================================== -->
 
 <div class="card">
 
@@ -343,10 +333,6 @@ onclick="ajouterEmail()">
 </div>
 
 
-<!-- =====================================================
-     VÉHICULES
-===================================================== -->
-
 <div class="card">
 
 <h2>🚘 Mes véhicules</h2>
@@ -359,6 +345,13 @@ onclick="ajouterEmail()">
 
 
 <script>
+
+/* =====================================================
+   CLÉ OCR.SPACE
+===================================================== */
+
+const OCR_API_KEY = "K89493204488957";
+
 
 /* =====================================================
    DONNÉES
@@ -406,7 +399,7 @@ sauvegarderVehicules();
 
 
 /* =====================================================
-   CLAVIER IPHONE — IMMATRICULATION
+   CLAVIER IPHONE
 ===================================================== */
 
 function activerClavierImmatriculation(){
@@ -417,14 +410,13 @@ document.getElementById(
 );
 
 input.focus();
-
 input.select();
 
 }
 
 
 /* =====================================================
-   SCANNER
+   OUVRIR SCANNER
 ===================================================== */
 
 function ouvrirScanner(){
@@ -438,6 +430,10 @@ document
 }
 
 
+/* =====================================================
+   SCANNER IMMATRICULATION
+===================================================== */
+
 async function scannerPhoto(input){
 
 const fichier=input.files[0];
@@ -450,11 +446,9 @@ document.getElementById(
 );
 
 status.style.display="block";
-
 status.style.background="#fff3cd";
-
 status.textContent=
-"📷 Analyse de la photo en cours…";
+"📷 Préparation de la photo…";
 
 try{
 
@@ -464,7 +458,7 @@ await chargerImage(fichier);
 const images=
 creerImagesPourOCR(image);
 
-let resultat="";
+let resultat=null;
 
 for(
 let i=0;
@@ -473,13 +467,18 @@ i++
 ){
 
 status.textContent=
-"🔎 Reconnaissance… "+
+"🔎 Lecture de la plaque… "+
 (i+1)+"/"+
 images.length;
 
 const texte=
 await reconnaitreTexte(
 images[i]
+);
+
+console.log(
+"OCR résultat :",
+texte
 );
 
 const plaque=
@@ -498,12 +497,14 @@ break;
 
 if(resultat){
 
+const champ=
 document.getElementById(
 "immatriculation"
-).value=resultat;
+);
 
-status.style.background=
-"#d4edda";
+champ.value=resultat;
+
+status.style.background="#d4edda";
 
 status.textContent=
 "✅ Immatriculation reconnue : "+
@@ -511,12 +512,11 @@ resultat;
 
 }else{
 
-status.style.background=
-"#f8d7da";
+status.style.background="#f8d7da";
 
 status.textContent=
 "❌ Plaque non reconnue. "+
-"Utilise le champ et le micro du clavier.";
+"Prends une photo plus rapprochée et plus nette.";
 
 }
 
@@ -524,11 +524,10 @@ status.textContent=
 
 console.error(erreur);
 
-status.style.background=
-"#f8d7da";
+status.style.background="#f8d7da";
 
 status.textContent=
-"❌ Impossible de lire la plaque.";
+"❌ Erreur pendant la lecture de la plaque.";
 
 }
 
@@ -538,7 +537,7 @@ input.value="";
 
 
 /* =====================================================
-   OCR
+   CHARGER IMAGE
 ===================================================== */
 
 function chargerImage(fichier){
@@ -549,13 +548,14 @@ return new Promise(
 const reader=
 new FileReader();
 
-reader.onload=e=>{
+reader.onload=function(e){
 
 const img=
 new Image();
 
-img.onload=()=>
+img.onload=function(){
 resolve(img);
+};
 
 img.onerror=reject;
 
@@ -570,12 +570,17 @@ fichier
 );
 
 });
+
 }
 
 
+/* =====================================================
+   PRÉPARATION DES IMAGES OCR
+===================================================== */
+
 function creerImagesPourOCR(img){
 
-const largeur=1600;
+const largeur=1800;
 
 const ratio=
 largeur/img.width;
@@ -585,13 +590,15 @@ Math.round(
 img.height*ratio
 );
 
+
+/* IMAGE ORIGINALE */
+
 const canvas=
 document.createElement(
 "canvas"
 );
 
 canvas.width=largeur;
-
 canvas.height=hauteur;
 
 const ctx=
@@ -611,19 +618,21 @@ canvas.toDataURL(
 .95
 );
 
-const gris=
+
+/* IMAGE CONTRASTÉE */
+
+const contraste=
 document.createElement(
 "canvas"
 );
 
-gris.width=largeur;
+contraste.width=largeur;
+contraste.height=hauteur;
 
-gris.height=hauteur;
+const c=
+contraste.getContext("2d");
 
-const g=
-gris.getContext("2d");
-
-g.drawImage(
+c.drawImage(
 img,
 0,
 0,
@@ -632,7 +641,7 @@ hauteur
 );
 
 const data=
-g.getImageData(
+c.getImageData(
 0,
 0,
 largeur,
@@ -646,19 +655,16 @@ i+=4
 ){
 
 const r=data.data[i];
-
-const v=data.data[i+1];
-
+const g=data.data[i+1];
 const b=data.data[i+2];
 
 let valeur=
-.299*r+
-.587*v+
-.114*b;
+0.299*r+
+0.587*g+
+0.114*b;
 
 valeur=
-(valeur-128)*1.6+
-128;
+(valeur-128)*1.8+128;
 
 valeur=
 Math.max(
@@ -675,11 +681,20 @@ data.data[i+2]=valeur;
 
 }
 
-g.putImageData(
+c.putImageData(
 data,
 0,
 0
 );
+
+const imageContraste=
+contraste.toDataURL(
+"image/jpeg",
+.95
+);
+
+
+/* NOIR ET BLANC */
 
 const noirBlanc=
 document.createElement(
@@ -687,14 +702,13 @@ document.createElement(
 );
 
 noirBlanc.width=largeur;
-
 noirBlanc.height=hauteur;
 
 const n=
 noirBlanc.getContext("2d");
 
 n.drawImage(
-gris,
+contraste,
 0,
 0
 );
@@ -716,7 +730,7 @@ i+=4
 const valeur=d.data[i];
 
 const resultat=
-valeur>145
+valeur>150
 ?255
 :0;
 
@@ -732,56 +746,134 @@ d,
 0
 );
 
-return[
-original,
-gris.toDataURL(
-"image/jpeg",
-.95
-),
+const imageNoirBlanc=
 noirBlanc.toDataURL(
 "image/jpeg",
 .95
-)
+);
+
+return[
+original,
+imageContraste,
+imageNoirBlanc
 ];
 
 }
 
 
+/* =====================================================
+   OCR.SPACE
+===================================================== */
+
 async function reconnaitreTexte(image){
 
-const worker=
-await Tesseract.createWorker(
+const blob=
+await(
+await fetch(image)
+).blob();
+
+const formData=
+new FormData();
+
+formData.append(
+"apikey",
+OCR_API_KEY
+);
+
+formData.append(
+"language",
 "eng"
 );
 
-await worker.setParameters({
-
-tessedit_char_whitelist:
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-
-tessedit_pageseg_mode:
-"7"
-
-});
-
-const resultat=
-await worker.recognize(
-image
+formData.append(
+"isOverlayRequired",
+"false"
 );
 
-const texte=
-resultat.data.text||"";
+formData.append(
+"OCREngine",
+"2"
+);
 
-await worker.terminate();
+formData.append(
+"scale",
+"true"
+);
+
+formData.append(
+"file",
+blob,
+"plaque.jpg"
+);
+
+const response=
+await fetch(
+"https://api.ocr.space/parse/image",
+{
+method:"POST",
+body:formData
+}
+);
+
+if(!response.ok){
+
+throw new Error(
+"Erreur OCR HTTP "+
+response.status
+);
+
+}
+
+const resultat=
+await response.json();
+
+console.log(
+"Réponse OCR :",
+resultat
+);
+
+if(
+resultat.IsErroredOnProcessing
+){
+
+throw new Error(
+resultat.ErrorMessage ||
+"Erreur OCR"
+);
+
+}
+
+let texte="";
+
+if(
+Array.isArray(
+resultat.ParsedResults
+)
+){
+
+texte=
+resultat.ParsedResults
+.map(
+r=>r.ParsedText||""
+)
+.join("\n");
+
+}
 
 return texte.toUpperCase();
 
 }
 
 
+/* =====================================================
+   EXTRACTION PLAQUE
+===================================================== */
+
 function extraireImmatriculation(texte){
 
-const propre=
+if(!texte)return null;
+
+let propre=
 texte
 .toUpperCase()
 .replace(
@@ -789,16 +881,41 @@ texte
 ""
 );
 
-const correspondance=
+let correspondance=
 propre.match(
 /[A-Z]{2}[0-9]{3}[A-Z]{2}/
 );
 
-if(!correspondance)return null;
+if(correspondance){
 
 return formaterPlaque(
 correspondance[0]
 );
+
+}
+
+let corrige=
+propre
+.replace(/O/g,"0")
+.replace(/I/g,"1")
+.replace(/L/g,"1")
+.replace(/S/g,"5")
+.replace(/B(?=\d)/g,"8");
+
+correspondance=
+corrige.match(
+/[A-Z]{2}[0-9]{3}[A-Z]{2}/
+);
+
+if(correspondance){
+
+return formaterPlaque(
+correspondance[0]
+);
+
+}
+
+return null;
 
 }
 
@@ -982,7 +1099,7 @@ afficherVehicules();
 
 
 /* =====================================================
-   SAUVEGARDE
+   SAUVEGARDE VÉHICULES
 ===================================================== */
 
 function sauvegarderVehicules(){
@@ -994,12 +1111,12 @@ vehicules
 )
 );
 
+}
+
 
 /* =====================================================
    AFFICHER VÉHICULES
 ===================================================== */
-
-}
 
 function afficherVehicules(){
 
@@ -1103,7 +1220,7 @@ afficherPhotos(vehicle);
 
 
 /* =====================================================
-   PHOTOS
+   AJOUTER PHOTO
 ===================================================== */
 
 function ajouterPhoto(
@@ -1277,7 +1394,7 @@ container.appendChild(div);
 
 
 /* =====================================================
-   COMMENTAIRE PHOTO AVEC CLAVIER IPHONE
+   COMMENTAIRE PHOTO
 ===================================================== */
 
 function ouvrirCommentairePhoto(
@@ -1297,12 +1414,6 @@ vehicle.photos[photoIndex];
 
 if(!photo)return;
 
-
-/*
- * On crée une petite fenêtre
- * directement dans la page.
- */
-
 const overlay=
 document.createElement(
 "div"
@@ -1320,7 +1431,6 @@ overlay.style.display="flex";
 overlay.style.alignItems="center";
 overlay.style.justifyContent="center";
 
-
 const box=
 document.createElement(
 "div"
@@ -1331,7 +1441,6 @@ box.style.borderRadius="15px";
 box.style.padding="15px";
 box.style.width="100%";
 box.style.maxWidth="500px";
-
 
 box.innerHTML=`
 
@@ -1371,7 +1480,6 @@ document.body.appendChild(
 overlay
 );
 
-
 const textarea=
 document.getElementById(
 "commentaireTemporaire"
@@ -1383,7 +1491,6 @@ textarea.setSelectionRange(
 textarea.value.length,
 textarea.value.length
 );
-
 
 document.getElementById(
 "boutonValiderCommentaire"
@@ -1398,7 +1505,6 @@ textarea.value
 overlay.remove();
 
 };
-
 
 document.getElementById(
 "boutonAnnulerCommentaire"
@@ -1604,7 +1710,6 @@ emails
 )
 );
 
-
 }
 
 
@@ -1774,7 +1879,7 @@ corps
 
 
 /* =====================================================
-   PARTAGE PHOTOS
+   PARTAGER PHOTOS
 ===================================================== */
 
 async function partagerPhotos(
