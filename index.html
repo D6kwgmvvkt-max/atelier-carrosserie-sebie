@@ -297,7 +297,6 @@ video {
 
 <div class="container">
 
-  <!-- ACCUEIL -->
   <div id="home">
 
     <div class="card">
@@ -337,7 +336,6 @@ video {
   </div>
 
 
-  <!-- DOSSIER -->
   <div id="folder" class="hidden">
 
     <button class="secondary" onclick="showHome()">
@@ -387,6 +385,7 @@ video {
 
 
 <!-- MODAL SCANNER -->
+
 <div id="scannerModal" class="modal hidden">
 
   <div class="modal-box">
@@ -436,6 +435,7 @@ video {
 
 
 <!-- MODAL PLAQUE MANUELLE -->
+
 <div id="plateModal" class="modal hidden">
 
   <div class="modal-box">
@@ -462,6 +462,7 @@ video {
 
 
 <!-- MODAL EMAIL -->
+
 <div id="emailModal" class="modal hidden">
 
   <div class="modal-box">
@@ -530,7 +531,9 @@ let currentVehicleId = null;
 function loadVehicles() {
 
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+
+    const saved =
+      localStorage.getItem(STORAGE_KEY);
 
     if (saved) {
       vehicles = JSON.parse(saved);
@@ -539,18 +542,23 @@ function loadVehicles() {
     }
 
   } catch (error) {
+
     console.error(error);
     vehicles = [];
+
   }
 
   renderRecentVehicles();
 }
 
+
 function saveVehicles() {
+
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(vehicles)
   );
+
 }
 
 
@@ -559,13 +567,20 @@ function saveVehicles() {
 ========================================================= */
 
 function generateId() {
+
   return Date.now().toString() +
-         Math.random().toString(36).substring(2);
+    Math.random().toString(36).substring(2);
+
 }
 
+
 function today() {
-  return new Date().toLocaleDateString("fr-FR");
+
+  return new Date()
+    .toLocaleDateString("fr-FR");
+
 }
+
 
 function normalizePlate(value) {
 
@@ -573,29 +588,39 @@ function normalizePlate(value) {
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, "")
     .slice(0, 9);
+
 }
+
 
 function formatPlate(value) {
 
-  const clean = normalizePlate(value);
+  const clean =
+    normalizePlate(value);
 
   if (clean.length <= 2) {
     return clean;
   }
 
   if (clean.length <= 5) {
-    return clean.slice(0,2) + "-" + clean.slice(2);
+    return clean.slice(0, 2) +
+      "-" +
+      clean.slice(2);
   }
 
-  return clean.slice(0,2) +
+  return clean.slice(0, 2) +
     "-" +
-    clean.slice(2,5) +
+    clean.slice(2, 5) +
     "-" +
-    clean.slice(5,7);
+    clean.slice(5, 7);
+
 }
 
+
 function formatPlateInput(input) {
-  input.value = formatPlate(input.value);
+
+  input.value =
+    formatPlate(input.value);
+
 }
 
 
@@ -615,11 +640,14 @@ function showHome() {
 
   renderRecentVehicles();
   searchVehicles();
+
 }
+
 
 function openFolder(id) {
 
-  const vehicle = vehicles.find(v => v.id === id);
+  const vehicle =
+    vehicles.find(v => v.id === id);
 
   if (!vehicle) return;
 
@@ -635,18 +663,27 @@ function openFolder(id) {
     .textContent = vehicle.plate;
 
   document.getElementById("folderInfo").innerHTML = `
+
     <div class="vehicle">
-      <div class="vehicle-title">${vehicle.plate}</div>
+
+      <div class="vehicle-title">
+        ${vehicle.plate}
+      </div>
+
       <div class="vehicle-info">
         Dossier créé le ${vehicle.date}
       </div>
+
       <div class="vehicle-info">
         ${vehicle.photos.length} photo(s)
       </div>
+
     </div>
+
   `;
 
   renderPhotos();
+
 }
 
 
@@ -656,28 +693,40 @@ function openFolder(id) {
 
 function createVehicle(plate) {
 
-  plate = formatPlate(plate);
+  plate =
+    formatPlate(plate);
 
   if (!plate || plate.length < 7) {
-    alert("Veuillez saisir une immatriculation valide.");
+
+    alert(
+      "Veuillez saisir une immatriculation valide."
+    );
+
     return;
   }
 
-  const existing = vehicles.find(
-    v => v.plate === plate
-  );
+
+  const existing =
+    vehicles.find(
+      v => v.plate === plate
+    );
+
 
   if (existing) {
 
-    currentVehicleId = existing.id;
+    currentVehicleId =
+      existing.id;
 
     closeScanner();
     closePlateModal();
 
-    openFolder(existing.id);
+    openFolder(
+      existing.id
+    );
 
     return;
   }
+
 
   const vehicle = {
 
@@ -691,6 +740,7 @@ function createVehicle(plate) {
 
   };
 
+
   vehicles.unshift(vehicle);
 
   saveVehicles();
@@ -698,25 +748,34 @@ function createVehicle(plate) {
   closeScanner();
   closePlateModal();
 
-  openFolder(vehicle.id);
+  openFolder(
+    vehicle.id
+  );
+
 }
 
 
 function createVehicleManual() {
 
   const value =
-    document.getElementById("manualPlate").value;
+    document.getElementById(
+      "manualPlate"
+    ).value;
 
   createVehicle(value);
+
 }
 
 
 function createVehicleFromOCR() {
 
   const value =
-    document.getElementById("ocrPlate").value;
+    document.getElementById(
+      "ocrPlate"
+    ).value;
 
   createVehicle(value);
+
 }
 
 
@@ -727,7 +786,10 @@ function createVehicleFromOCR() {
 function renderRecentVehicles() {
 
   const container =
-    document.getElementById("recentVehicles");
+    document.getElementById(
+      "recentVehicles"
+    );
+
 
   if (!vehicles.length) {
 
@@ -740,27 +802,32 @@ function renderRecentVehicles() {
     return;
   }
 
+
   container.innerHTML =
-    vehicles.slice(0, 20).map(vehicle => `
+    vehicles
+      .slice(0, 20)
+      .map(vehicle => `
 
-      <div
-        class="vehicle"
-        onclick="openFolder('${vehicle.id}')"
-      >
+        <div
+          class="vehicle"
+          onclick="openFolder('${vehicle.id}')"
+        >
 
-        <div class="vehicle-title">
-          ${vehicle.plate}
+          <div class="vehicle-title">
+            ${vehicle.plate}
+          </div>
+
+          <div class="vehicle-info">
+            ${vehicle.date}
+            ·
+            ${vehicle.photos.length} photo(s)
+          </div>
+
         </div>
 
-        <div class="vehicle-info">
-          ${vehicle.date}
-          ·
-          ${vehicle.photos.length} photo(s)
-        </div>
+      `)
+      .join("");
 
-      </div>
-
-    `).join("");
 }
 
 
@@ -771,13 +838,19 @@ function renderRecentVehicles() {
 function searchVehicles() {
 
   const value =
-    document.getElementById("searchInput")
-      .value
-      .toUpperCase()
-      .trim();
+    document.getElementById(
+      "searchInput"
+    )
+    .value
+    .toUpperCase()
+    .trim();
+
 
   const container =
-    document.getElementById("searchResults");
+    document.getElementById(
+      "searchResults"
+    );
+
 
   if (!value) {
 
@@ -786,10 +859,12 @@ function searchVehicles() {
     return;
   }
 
+
   const results =
-    vehicles.filter(v =>
-      v.plate.includes(value)
+    vehicles.filter(
+      v => v.plate.includes(value)
     );
+
 
   if (!results.length) {
 
@@ -802,27 +877,31 @@ function searchVehicles() {
     return;
   }
 
+
   container.innerHTML =
-    results.map(vehicle => `
+    results
+      .map(vehicle => `
 
-      <div
-        class="vehicle"
-        onclick="openFolder('${vehicle.id}')"
-      >
+        <div
+          class="vehicle"
+          onclick="openFolder('${vehicle.id}')"
+        >
 
-        <div class="vehicle-title">
-          ${vehicle.plate}
+          <div class="vehicle-title">
+            ${vehicle.plate}
+          </div>
+
+          <div class="vehicle-info">
+            ${vehicle.date}
+            ·
+            ${vehicle.photos.length} photo(s)
+          </div>
+
         </div>
 
-        <div class="vehicle-info">
-          ${vehicle.date}
-          ·
-          ${vehicle.photos.length} photo(s)
-        </div>
+      `)
+      .join("");
 
-      </div>
-
-    `).join("");
 }
 
 
@@ -832,54 +911,79 @@ function searchVehicles() {
 
 function addPhotos(event) {
 
-  const files = Array.from(event.target.files);
+  const files =
+    Array.from(
+      event.target.files
+    );
+
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
 
   if (!vehicle) return;
 
+
   files.forEach(file => {
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
-    reader.onload = function(e) {
 
-      vehicle.photos.push({
+    reader.onload =
+      function(e) {
 
-        id: generateId(),
+        vehicle.photos.push({
 
-        data: e.target.result,
+          id: generateId(),
 
-        comment: "",
+          data: e.target.result,
 
-        date: new Date().toISOString()
+          comment: "",
 
-      });
+          date:
+            new Date().toISOString()
 
-      saveVehicles();
+        });
 
-      renderPhotos();
 
-    };
+        saveVehicles();
+
+        renderPhotos();
+
+      };
+
 
     reader.readAsDataURL(file);
 
   });
 
+
   event.target.value = "";
+
 }
 
 
 function renderPhotos() {
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
 
   const grid =
-    document.getElementById("photoGrid");
+    document.getElementById(
+      "photoGrid"
+    );
 
-  if (!vehicle || !vehicle.photos.length) {
+
+  if (
+    !vehicle ||
+    !vehicle.photos.length
+  ) {
 
     grid.innerHTML = `
       <p class="small">
@@ -890,80 +994,109 @@ function renderPhotos() {
     return;
   }
 
+
   grid.innerHTML =
-    vehicle.photos.map(photo => `
+    vehicle.photos
+      .map(photo => `
 
-      <div class="photo">
+        <div class="photo">
 
-        <img src="${photo.data}">
+          <img src="${photo.data}">
 
-        <div class="photo-actions">
+          <div class="photo-actions">
 
-          <button
-            onclick="event.stopPropagation();
-            addPhotoComment('${photo.id}')"
-          >
-            💬
-          </button>
+            <button
+              onclick="
+                event.stopPropagation();
+                addPhotoComment('${photo.id}')
+              "
+            >
+              💬
+            </button>
 
-          <button
-            onclick="event.stopPropagation();
-            deletePhoto('${photo.id}')"
-          >
-            🗑️
-          </button>
+            <button
+              onclick="
+                event.stopPropagation();
+                deletePhoto('${photo.id}')
+              "
+            >
+              🗑️
+            </button>
+
+          </div>
+
+          ${
+            photo.comment
+            ?
+            `<div class="comment">
+               ${escapeHtml(photo.comment)}
+             </div>`
+            :
+            ""
+          }
 
         </div>
 
-        ${
-          photo.comment
-          ?
-          `<div class="comment">
-             ${escapeHtml(photo.comment)}
-           </div>`
-          :
-          ""
-        }
+      `)
+      .join("");
 
-      </div>
-
-    `).join("");
 }
 
 
 function deletePhoto(photoId) {
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
 
   if (!vehicle) return;
 
-  if (!confirm("Supprimer cette photo ?")) {
+
+  if (
+    !confirm(
+      "Supprimer cette photo ?"
+    )
+  ) {
+
     return;
+
   }
+
 
   vehicle.photos =
     vehicle.photos.filter(
       p => p.id !== photoId
     );
 
+
   saveVehicles();
 
   renderPhotos();
+
 }
 
 
 function addPhotoComment(photoId) {
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
+
+  if (!vehicle) return;
+
 
   const photo =
     vehicle.photos.find(
       p => p.id === photoId
     );
 
+
   if (!photo) return;
+
 
   const comment =
     prompt(
@@ -971,13 +1104,16 @@ function addPhotoComment(photoId) {
       photo.comment || ""
     );
 
+
   if (comment === null) return;
+
 
   photo.comment = comment;
 
   saveVehicles();
 
   renderPhotos();
+
 }
 
 
@@ -989,6 +1125,7 @@ function escapeHtml(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+
 }
 
 
@@ -1002,6 +1139,7 @@ function startPlateDictation() {
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
   if (!SpeechRecognition) {
 
     alert(
@@ -1011,39 +1149,60 @@ function startPlateDictation() {
     return;
   }
 
+
   const recognition =
     new SpeechRecognition();
 
-  recognition.lang = "fr-FR";
 
-  recognition.continuous = false;
+  recognition.lang =
+    "fr-FR";
 
-  recognition.interimResults = false;
+  recognition.continuous =
+    false;
 
-  recognition.onresult = function(event) {
+  recognition.interimResults =
+    false;
 
-    const text =
-      event.results[0][0].transcript;
 
-    const cleaned =
-      convertSpokenPlate(text);
+  recognition.onresult =
+    function(event) {
 
-    document.getElementById("manualPlate").value =
-      cleaned;
+      const text =
+        event.results[0][0]
+          .transcript;
 
-    document.getElementById("plateModal")
-      .classList.remove("hidden");
-  };
 
-  recognition.onerror = function() {
+      const cleaned =
+        convertSpokenPlate(text);
 
-    alert(
-      "La dictée n'a pas fonctionné. Vous pouvez saisir la plaque manuellement."
-    );
 
-  };
+      document.getElementById(
+        "manualPlate"
+      ).value = cleaned;
+
+
+      document.getElementById(
+        "plateModal"
+      )
+      .classList.remove(
+        "hidden"
+      );
+
+    };
+
+
+  recognition.onerror =
+    function() {
+
+      alert(
+        "La dictée n'a pas fonctionné. Vous pouvez saisir la plaque manuellement."
+      );
+
+    };
+
 
   recognition.start();
+
 }
 
 
@@ -1053,6 +1212,7 @@ function convertSpokenPlate(text) {
     text
       .toUpperCase()
       .replaceAll(" ", "");
+
 
   const replacements = {
 
@@ -1070,7 +1230,10 @@ function convertSpokenPlate(text) {
 
   };
 
-  Object.keys(replacements).forEach(word => {
+
+  Object.keys(
+    replacements
+  ).forEach(word => {
 
     value =
       value.replaceAll(
@@ -1080,13 +1243,16 @@ function convertSpokenPlate(text) {
 
   });
 
+
   value =
     value.replace(
       /[^A-Z0-9]/g,
       ""
     );
 
+
   return formatPlate(value);
+
 }
 
 
@@ -1096,15 +1262,24 @@ function convertSpokenPlate(text) {
 
 function openPlateManual() {
 
-  document.getElementById("manualPlate").value = "";
+  document.getElementById(
+    "manualPlate"
+  ).value = "";
 
-  document.getElementById("plateModal")
-    .classList.remove("hidden");
+
+  document.getElementById(
+    "plateModal"
+  )
+  .classList.remove(
+    "hidden"
+  );
+
 
   setTimeout(() => {
 
-    document.getElementById("manualPlate")
-      .focus();
+    document.getElementById(
+      "manualPlate"
+    ).focus();
 
   }, 200);
 
@@ -1113,94 +1288,361 @@ function openPlateManual() {
 
 function closePlateModal() {
 
-  document.getElementById("plateModal")
-    .classList.add("hidden");
+  document.getElementById(
+    "plateModal"
+  )
+  .classList.add(
+    "hidden"
+  );
+
 }
 
 
 /* =========================================================
    OCR SPACE
+   VERSION OCR ESPACE QUI FONCTIONNAIT
 ========================================================= */
 
 function openScanner() {
 
-  document.getElementById("scannerModal")
-    .classList.remove("hidden");
+  document.getElementById(
+    "scannerModal"
+  )
+  .classList.remove(
+    "hidden"
+  );
 
-  document.getElementById("ocrStatus")
-    .innerHTML = "";
 
-  document.getElementById("ocrResult")
-    .classList.add("hidden");
+  document.getElementById(
+    "ocrStatus"
+  ).innerHTML = "";
+
+
+  document.getElementById(
+    "ocrResult"
+  )
+  .classList.add(
+    "hidden"
+  );
+
+
+  document.getElementById(
+    "ocrPlate"
+  ).value = "";
+
 }
 
 
 function closeScanner() {
 
-  document.getElementById("scannerModal")
-    .classList.add("hidden");
+  document.getElementById(
+    "scannerModal"
+  )
+  .classList.add(
+    "hidden"
+  );
+
 }
 
+
+/*
+  Préparation de la photo avant OCR.
+
+  On limite l'image à 1600 pixels maximum
+  et on la convertit en JPEG.
+*/
+
+function prepareOCRImage(file) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(event) {
+
+          const img =
+            new Image();
+
+
+          img.onload =
+            function() {
+
+              const maxSize =
+                1600;
+
+
+              let width =
+                img.width;
+
+              let height =
+                img.height;
+
+
+              if (
+                width > maxSize ||
+                height > maxSize
+              ) {
+
+                if (width > height) {
+
+                  height =
+                    Math.round(
+                      height *
+                      maxSize /
+                      width
+                    );
+
+                  width =
+                    maxSize;
+
+                } else {
+
+                  width =
+                    Math.round(
+                      width *
+                      maxSize /
+                      height
+                    );
+
+                  height =
+                    maxSize;
+
+                }
+
+              }
+
+
+              const canvas =
+                document.createElement(
+                  "canvas"
+                );
+
+
+              canvas.width =
+                width;
+
+              canvas.height =
+                height;
+
+
+              const ctx =
+                canvas.getContext(
+                  "2d"
+                );
+
+
+              ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
+              );
+
+
+              canvas.toBlob(
+                function(blob) {
+
+                  if (!blob) {
+
+                    reject(
+                      new Error(
+                        "Impossible de préparer l'image."
+                      )
+                    );
+
+                    return;
+
+                  }
+
+
+                  resolve(blob);
+
+                },
+                "image/jpeg",
+                0.90
+              );
+
+            };
+
+
+          img.onerror =
+            function() {
+
+              reject(
+                new Error(
+                  "Impossible de lire la photo."
+                )
+              );
+
+            };
+
+
+          img.src =
+            event.target.result;
+
+        };
+
+
+      reader.onerror =
+        function() {
+
+          reject(
+            new Error(
+              "Impossible de charger la photo."
+            )
+          );
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+
+/*
+  LECTURE OCR
+*/
 
 async function performOCR(event) {
 
   const file =
     event.target.files[0];
 
+
   if (!file) return;
 
+
   const status =
-    document.getElementById("ocrStatus");
+    document.getElementById(
+      "ocrStatus"
+    );
+
+
+  const result =
+    document.getElementById(
+      "ocrResult"
+    );
+
+
+  const plateInput =
+    document.getElementById(
+      "ocrPlate"
+    );
+
+
+  result.classList.add(
+    "hidden"
+  );
+
+
+  plateInput.value = "";
+
 
   status.innerHTML = `
     <div class="status">
-      🔎 Lecture de la plaque en cours...
+      🔎 Préparation de la photo...
     </div>
   `;
 
+
   try {
+
+    const imageBlob =
+      await prepareOCRImage(
+        file
+      );
+
+
+    status.innerHTML = `
+      <div class="status">
+        🔎 Lecture de la plaque en cours...
+      </div>
+    `;
+
+
+    /*
+      Envoi vers OCR.space.
+
+      IMPORTANT :
+      la clé API est envoyée dans
+      l'en-tête "apikey".
+    */
 
     const formData =
       new FormData();
 
-    formData.append(
-      "apikey",
-      OCR_API_KEY
-    );
 
     formData.append(
       "language",
       "eng"
     );
 
+
     formData.append(
       "isOverlayRequired",
       "false"
     );
+
 
     formData.append(
       "OCREngine",
       "2"
     );
 
+
     formData.append(
       "file",
-      file
+      imageBlob,
+      "plaque.jpg"
     );
+
 
     const response =
       await fetch(
         "https://api.ocr.space/parse/image",
         {
           method: "POST",
+
+          headers: {
+            "apikey": OCR_API_KEY
+          },
+
           body: formData
         }
       );
 
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Erreur HTTP " +
+        response.status
+      );
+
+    }
+
+
     const data =
       await response.json();
 
+
+    console.log(
+      "Réponse OCR.space :",
+      data
+    );
+
+
     let text = "";
+
 
     if (
       data.ParsedResults &&
@@ -1209,66 +1651,116 @@ async function performOCR(event) {
 
       text =
         data.ParsedResults
-          .map(r => r.ParsedText || "")
+          .map(
+            result =>
+              result.ParsedText || ""
+          )
           .join(" ");
 
     }
 
+
+    console.log(
+      "Texte OCR :",
+      text
+    );
+
+
     const plate =
       findPlate(text);
+
 
     if (!plate) {
 
       status.innerHTML = `
         <div class="warning">
-          ⚠️ Je n'ai pas réussi à reconnaître
-          automatiquement la plaque.
-          Vérifie la photo ou saisis-la manuellement.
+          ⚠️ La plaque n'a pas été reconnue automatiquement.
+          Essaie avec une photo plus proche et bien nette.
         </div>
       `;
 
       return;
+
     }
 
-    document.getElementById("ocrPlate")
-      .value = plate;
 
-    document.getElementById("ocrResult")
-      .classList.remove("hidden");
+    plateInput.value =
+      plate;
+
+
+    result.classList.remove(
+      "hidden"
+    );
+
 
     status.innerHTML = `
       <div class="status">
-        ✅ Plaque reconnue
+        ✅ Plaque reconnue : ${plate}
       </div>
     `;
 
+
   } catch(error) {
 
-    console.error(error);
+    console.error(
+      "Erreur OCR :",
+      error
+    );
+
 
     status.innerHTML = `
       <div class="warning">
-        ❌ Erreur pendant la reconnaissance.
-        Tu peux saisir la plaque manuellement.
+        ❌ Erreur pendant la lecture de la plaque.
+        Vérifie ta connexion puis réessaie.
       </div>
     `;
 
   }
 
+
   event.target.value = "";
+
 }
 
 
+/*
+  RECHERCHE DE LA PLAQUE
+*/
+
 function findPlate(text) {
+
+  if (!text) {
+    return "";
+  }
+
+
+  /*
+    Nettoyage du texte OCR.
+  */
 
   const clean =
     text
       .toUpperCase()
-      .replace(/[^A-Z0-9]/g, "");
+      .normalize("NFD")
+      .replace(
+        /[\u0300-\u036f]/g,
+        ""
+      )
+      .replace(
+        /[^A-Z0-9]/g,
+        ""
+      );
+
+
+  console.log(
+    "OCR nettoyé :",
+    clean
+  );
+
 
   /*
-    Recherche classique d'une plaque française :
-    2 lettres + 3 chiffres + 2 lettres
+    Cas normal :
+    AB123CD
   */
 
   let match =
@@ -1276,46 +1768,122 @@ function findPlate(text) {
       /[A-Z]{2}[0-9]{3}[A-Z]{2}/
     );
 
+
   if (match) {
 
-    return formatPlate(match[0]);
+    return formatPlate(
+      match[0]
+    );
 
   }
 
+
   /*
-    Quelques variantes OCR fréquentes
+    OCR avec espaces :
+    AB 123 CD
   */
 
-  const letters =
+  const parts =
+    text
+      .toUpperCase()
+      .match(
+        /[A-Z0-9]+/g
+      );
+
+
+  if (
+    parts &&
+    parts.length
+  ) {
+
+    for (
+      let i = 0;
+      i < parts.length;
+      i++
+    ) {
+
+      let combined =
+        "";
+
+
+      for (
+        let j = i;
+        j < Math.min(
+          i + 3,
+          parts.length
+        );
+        j++
+      ) {
+
+        combined +=
+          parts[j]
+            .replace(
+              /[^A-Z0-9]/g,
+              ""
+            );
+
+
+        const candidate =
+          combined.match(
+            /[A-Z]{2}[0-9]{3}[A-Z]{2}/
+          );
+
+
+        if (candidate) {
+
+          return formatPlate(
+            candidate[0]
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  /*
+    Dernière tentative :
+    recherche séparée des morceaux.
+  */
+
+  const lettersStart =
     clean.match(
-      /[A-Z]{2}/
+      /^[A-Z]{2}/
     );
+
 
   const numbers =
     clean.match(
       /[0-9]{3}/
     );
 
-  const endLetters =
+
+  const lettersEnd =
     clean.match(
       /[A-Z]{2}$/
     );
 
+
   if (
-    letters &&
+    lettersStart &&
     numbers &&
-    endLetters
+    lettersEnd
   ) {
 
     return formatPlate(
-      letters[0] +
+      lettersStart[0] +
       numbers[0] +
-      endLetters[0]
+      lettersEnd[0]
     );
 
   }
 
+
   return "";
+
 }
 
 
@@ -1326,16 +1894,24 @@ function findPlate(text) {
 function openEmailPanel() {
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
 
   if (!vehicle) return;
 
-  document.getElementById("emailSubject")
-    .value =
-    "Photos véhicule " + vehicle.plate;
 
-  document.getElementById("emailMessage")
-    .value =
+  document.getElementById(
+    "emailSubject"
+  ).value =
+    "Photos véhicule " +
+    vehicle.plate;
+
+
+  document.getElementById(
+    "emailMessage"
+  ).value =
 `Bonjour,
 
 Veuillez trouver ci-joint les photos du véhicule ${vehicle.plate}.
@@ -1344,66 +1920,82 @@ Cordialement,
 
 Atelier Carrosserie Sébie`;
 
-  document.getElementById("emailModal")
-    .classList.remove("hidden");
+
+  document.getElementById(
+    "emailModal"
+  )
+  .classList.remove(
+    "hidden"
+  );
+
 }
 
 
 function closeEmailPanel() {
 
-  document.getElementById("emailModal")
-    .classList.add("hidden");
+  document.getElementById(
+    "emailModal"
+  )
+  .classList.add(
+    "hidden"
+  );
+
 }
 
 
 /*
-  NOUVELLE MÉTHODE D'ENVOI
-
-  On n'utilise volontairement PLUS :
-
-      mailto:
-
-  car cela passe par l'application mail par défaut
-  configurée sur l'iPhone.
-
-  On utilise le partage natif du téléphone.
-  Cela permet de sélectionner Mail Orange lorsqu'il
-  est proposé par le système.
+  Partage natif du téléphone.
 */
 
 async function sendWithOrange() {
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
 
   if (!vehicle) return;
 
+
   const to =
-    document.getElementById("emailTo").value.trim();
+    document.getElementById(
+      "emailTo"
+    ).value.trim();
+
 
   const subject =
-    document.getElementById("emailSubject").value;
+    document.getElementById(
+      "emailSubject"
+    ).value;
+
 
   const message =
-    document.getElementById("emailMessage").value;
+    document.getElementById(
+      "emailMessage"
+    ).value;
+
 
   const files = [];
 
-  /*
-    Transformation des photos en fichiers
-    afin qu'elles puissent être proposées
-    comme pièces jointes dans le partage.
-  */
 
-  for (let i = 0; i < vehicle.photos.length; i++) {
+  for (
+    let i = 0;
+    i < vehicle.photos.length;
+    i++
+  ) {
 
     try {
 
       const response =
-        await fetch(vehicle.photos[i].data);
+        await fetch(
+          vehicle.photos[i].data
+        );
+
 
       const blob =
         await response.blob();
+
 
       const file =
         new File(
@@ -1413,9 +2005,12 @@ async function sendWithOrange() {
           (i + 1) +
           ".jpg",
           {
-            type: blob.type || "image/jpeg"
+            type:
+              blob.type ||
+              "image/jpeg"
           }
         );
+
 
       files.push(file);
 
@@ -1427,32 +2022,38 @@ async function sendWithOrange() {
       );
 
     }
+
   }
+
 
   const shareData = {
 
     title: subject,
 
     text:
-      (to ? "À : " + to + "\n\n" : "") +
+      (
+        to
+          ? "À : " + to + "\n\n"
+          : ""
+      ) +
       message
 
   };
 
-  /*
-    Si le téléphone accepte le partage de fichiers,
-    on ajoute les photos.
-  */
 
   if (
     files.length &&
     navigator.canShare &&
-    navigator.canShare({ files })
+    navigator.canShare({
+      files
+    })
   ) {
 
-    shareData.files = files;
+    shareData.files =
+      files;
 
   }
+
 
   try {
 
@@ -1461,42 +2062,42 @@ async function sendWithOrange() {
       (
         !files.length ||
         !navigator.canShare ||
-        navigator.canShare({ files })
+        navigator.canShare({
+          files
+        })
       )
     ) {
 
-      await navigator.share(shareData);
+      await navigator.share(
+        shareData
+      );
 
       return;
 
     }
 
-    /*
-      Si le partage de fichiers n'est pas disponible,
-      on ouvre directement le Mail Orange web.
-    */
 
     openOrangeWebmail();
 
-  } catch(error) {
 
-    /*
-      L'utilisateur peut fermer le menu de partage.
-      Dans ce cas on ne montre pas une fausse erreur.
-    */
+  } catch(error) {
 
     if (
       error &&
-      error.name !== "AbortError"
+      error.name !==
+        "AbortError"
     ) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
       openOrangeWebmail();
 
     }
 
   }
+
 }
 
 
@@ -1521,13 +2122,22 @@ function openOrangeWebmail() {
 async function copyEmailText() {
 
   const to =
-    document.getElementById("emailTo").value;
+    document.getElementById(
+      "emailTo"
+    ).value;
+
 
   const subject =
-    document.getElementById("emailSubject").value;
+    document.getElementById(
+      "emailSubject"
+    ).value;
+
 
   const message =
-    document.getElementById("emailMessage").value;
+    document.getElementById(
+      "emailMessage"
+    ).value;
+
 
   const text =
 `À : ${to}
@@ -1536,13 +2146,17 @@ Objet : ${subject}
 
 ${message}`;
 
+
   try {
 
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard
+      .writeText(text);
+
 
     alert(
       "Le destinataire, l'objet et le message ont été copiés."
     );
+
 
   } catch(error) {
 
@@ -1551,6 +2165,7 @@ ${message}`;
     );
 
   }
+
 }
 
 
@@ -1561,9 +2176,13 @@ ${message}`;
 function deleteCurrentVehicle() {
 
   const vehicle =
-    vehicles.find(v => v.id === currentVehicleId);
+    vehicles.find(
+      v => v.id === currentVehicleId
+    );
+
 
   if (!vehicle) return;
+
 
   if (
     !confirm(
@@ -1577,14 +2196,17 @@ function deleteCurrentVehicle() {
 
   }
 
+
   vehicles =
     vehicles.filter(
       v => v.id !== currentVehicleId
     );
 
+
   saveVehicles();
 
   showHome();
+
 }
 
 
