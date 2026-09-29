@@ -1,324 +1,507 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b1f3a">
+<title>Atelier Carrosserie Sébie</title>
 
-  <title>Atelier Carrosserie Sébie</title>
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: #f3f5f8;
+  color: #142033;
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      background: #f2f2f7;
-      color: #111;
-    }
+button,
+input,
+textarea {
+  font: inherit;
+}
 
-    .app {
-      max-width: 700px;
-      margin: auto;
-      padding: 20px;
-      padding-bottom: 50px;
-    }
+button {
+  cursor: pointer;
+}
 
-    h1 {
-      text-align: center;
-      margin: 10px 0 25px;
-      font-size: 28px;
-    }
+.header {
+  background: linear-gradient(135deg, #081b35, #164d83);
+  color: white;
+  padding: 24px 18px 20px;
+  text-align: center;
+}
 
-    h2 {
-      margin-top: 0;
-    }
+.header h1 {
+  margin: 0;
+  font-size: 25px;
+  letter-spacing: .5px;
+}
 
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
+.header p {
+  margin: 7px 0 0;
+  opacity: .85;
+  font-size: 14px;
+}
 
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 18px;
+}
 
-    input[type="text"] {
-      width: 100%;
-      padding: 16px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      font-size: 20px;
-      text-transform: uppercase;
-      outline: none;
-    }
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.07);
+}
 
-    input[type="text"]:focus {
-      border-color: #007aff;
-    }
+h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
 
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 15px;
-      font-size: 17px;
-      font-weight: 600;
-      margin-top: 10px;
-      cursor: pointer;
-    }
+h3 {
+  margin-bottom: 8px;
+}
 
-    .primary {
-      background: #007aff;
-      color: white;
-    }
+.hidden {
+  display: none !important;
+}
 
-    .secondary {
-      background: #e5e5ea;
-      color: #111;
-    }
+.primary,
+.secondary,
+.danger,
+.orange {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px;
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 16px;
+}
 
-    .danger {
-      background: #ff3b30;
-      color: white;
-    }
+.primary {
+  background: #1264b4;
+  color: white;
+}
 
-    .success {
-      background: #34c759;
-      color: white;
-    }
+.secondary {
+  background: #edf3f8;
+  color: #12385e;
+}
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
+.orange {
+  background: #ff7900;
+  color: white;
+}
 
-    .scan-button {
-      background: #111;
-      color: white;
-      font-size: 19px;
-      padding: 17px;
-    }
+.danger {
+  background: #d92d20;
+  color: white;
+}
 
-    .scan-icon {
-      font-size: 24px;
-      margin-right: 6px;
-    }
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #ccd5df;
+  border-radius: 12px;
+  padding: 13px;
+  margin-top: 7px;
+  background: white;
+}
 
-    .status {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      display: none;
-      font-size: 15px;
-    }
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
 
-    .status.info {
-      display: block;
-      background: #e8f2ff;
-      color: #0055aa;
-    }
+label {
+  display: block;
+  font-weight: 700;
+  margin-top: 13px;
+}
 
-    .status.success {
-      display: block;
-      background: #e8f8ec;
-      color: #147a2e;
-    }
+.plate {
+  font-size: 25px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
 
-    .status.error {
-      display: block;
-      background: #ffe8e6;
-      color: #c00;
-    }
+.vehicle {
+  border: 1px solid #e1e6ec;
+  border-radius: 15px;
+  padding: 14px;
+  margin-top: 10px;
+  background: #fafbfd;
+}
 
-    .vehicle {
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      padding: 15px;
-      margin-top: 12px;
-      background: #fafafa;
-    }
+.vehicle-title {
+  font-size: 20px;
+  font-weight: 800;
+}
 
-    .vehicle-title {
-      font-size: 21px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+.vehicle-info {
+  color: #687586;
+  font-size: 13px;
+  margin-top: 4px;
+}
 
-    .vehicle-buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
 
-    .vehicle-buttons button {
-      width: auto;
-      flex: 1;
-      min-width: 120px;
-    }
+.photo {
+  position: relative;
+  border-radius: 13px;
+  overflow: hidden;
+  background: #ddd;
+}
 
-    .photos {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 15px;
-    }
+.photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
 
-    .photos img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 12px;
-      background: #ddd;
-    }
+.photo-actions {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  gap: 5px;
+}
 
-    .hidden {
-      display: none !important;
-    }
+.photo-actions button {
+  flex: 1;
+  border: 0;
+  border-radius: 8px;
+  padding: 7px;
+  background: rgba(0,0,0,.72);
+  color: white;
+  font-size: 12px;
+}
 
-    .small {
-      font-size: 13px;
-      color: #666;
-      margin-top: 8px;
-      line-height: 1.4;
-    }
+.small {
+  font-size: 12px;
+  color: #697789;
+}
 
-    .separator {
-      height: 1px;
-      background: #ddd;
-      margin: 20px 0;
-    }
+.status {
+  padding: 11px;
+  border-radius: 12px;
+  margin-top: 10px;
+  background: #edf7ed;
+  color: #216b2a;
+  font-size: 14px;
+}
 
-    .empty {
-      text-align: center;
-      color: #777;
-      padding: 15px;
-    }
-  </style>
+.warning {
+  padding: 11px;
+  border-radius: 12px;
+  margin-top: 10px;
+  background: #fff4dd;
+  color: #825800;
+  font-size: 14px;
+}
+
+.search {
+  margin-bottom: 15px;
+}
+
+.comment {
+  margin-top: 8px;
+  padding: 9px;
+  border-radius: 9px;
+  background: #f0f3f7;
+  font-size: 13px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 700px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 22px 22px 0 0;
+  padding: 20px;
+}
+
+.close {
+  float: right;
+  border: 0;
+  background: #eef1f5;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.file-label {
+  display: block;
+  background: #edf3f8;
+  color: #12385e;
+  border-radius: 14px;
+  padding: 15px;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+video {
+  width: 100%;
+  border-radius: 15px;
+  background: black;
+  margin-top: 10px;
+}
+
+.footer {
+  text-align: center;
+  color: #718096;
+  padding: 30px 10px;
+  font-size: 12px;
+}
+</style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="header">
+  <h1>🚗 ATELIER CARROSSERIE SÉBIE</h1>
+  <p>Gestion des dossiers véhicules</p>
+</div>
 
-  <h1>🚗 Atelier Carrosserie Sébie</h1>
+<div class="container">
 
-  <!-- NOUVEAU DOSSIER -->
-  <div class="card">
+  <!-- ACCUEIL -->
+  <div id="home">
 
-    <h2>Créer un dossier</h2>
+    <div class="card">
+      <h2>Nouveau dossier</h2>
 
-    <label for="immatriculation">
-      Immatriculation
-    </label>
+      <button class="primary" onclick="openScanner()">
+        📷 Scanner la plaque
+      </button>
 
-    <input
-      id="immatriculation"
-      type="text"
-      placeholder="Exemple : AB 123 CD"
-      autocomplete="off"
-      autocapitalize="characters"
-      spellcheck="false"
-    >
+      <button class="secondary" onclick="openPlateManual()">
+        🔢 Saisir l'immatriculation
+      </button>
 
-    <!-- BOUTON OCR -->
-    <button
-      class="scan-button"
-      type="button"
-      onclick="ouvrirScanner()"
-    >
-      <span class="scan-icon">📷</span>
-      Scanner l'immatriculation
-    </button>
+      <button class="secondary" onclick="startPlateDictation()">
+        🎙️ Dicter l'immatriculation
+      </button>
+    </div>
 
-    <!-- INPUT PHOTO INVISIBLE -->
-    <input
-      id="photoOCR"
-      type="file"
-      accept="image/*"
-      capture="environment"
-      class="hidden"
-      onchange="scannerImmatriculation(event)"
-    >
+    <div class="card">
+      <h2>Rechercher un dossier</h2>
 
-    <div id="ocrStatus" class="status"></div>
+      <input
+        id="searchInput"
+        class="search"
+        placeholder="Exemple : AB-123-CD"
+        oninput="searchVehicles()"
+      >
 
-    <button
-      class="primary"
-      type="button"
-      onclick="creerVehicule()"
-    >
-      Créer le dossier
-    </button>
+      <div id="searchResults"></div>
+    </div>
 
-    <div class="small">
-      Tu peux soit saisir l'immatriculation manuellement,
-      soit appuyer sur « Scanner » et photographier la plaque.
+    <div class="card">
+      <h2>Dossiers récents</h2>
+      <div id="recentVehicles"></div>
     </div>
 
   </div>
 
 
-  <!-- DOSSIERS -->
-  <div class="card">
+  <!-- DOSSIER -->
+  <div id="folder" class="hidden">
 
-    <h2>Dossiers véhicules</h2>
+    <button class="secondary" onclick="showHome()">
+      ← Retour
+    </button>
 
-    <div id="listeVehicules"></div>
+    <div class="card">
+
+      <h2 id="folderTitle"></h2>
+
+      <div id="folderInfo"></div>
+
+      <h3>Photos</h3>
+
+      <label class="file-label">
+        📷 Ajouter des photos
+        <input
+          id="photoInput"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          multiple
+          hidden
+          onchange="addPhotos(event)"
+        >
+      </label>
+
+      <div id="photoGrid" class="photo-grid"></div>
+
+      <button class="primary" onclick="openEmailPanel()">
+        ✉️ Envoyer par e-mail
+      </button>
+
+      <button class="danger" onclick="deleteCurrentVehicle()">
+        🗑️ Supprimer le dossier
+      </button>
+
+    </div>
 
   </div>
 
+</div>
 
-  <!-- DOSSIER ACTUEL -->
-  <div
-    id="dossierActuel"
-    class="card hidden"
-  >
+<div class="footer">
+  Atelier Carrosserie Sébie
+</div>
 
-    <h2 id="titreDossier"></h2>
 
-    <div class="separator"></div>
+<!-- MODAL SCANNER -->
+<div id="scannerModal" class="modal hidden">
 
-    <button
-      class="primary"
-      type="button"
-      onclick="prendrePhoto()"
-    >
-      📷 Ajouter une photo
-    </button>
+  <div class="modal-box">
+
+    <button class="close" onclick="closeScanner()">×</button>
+
+    <h2>Scanner la plaque</h2>
+
+    <p class="small">
+      Prends une photo nette de la plaque d'immatriculation.
+    </p>
+
+    <label class="file-label">
+      📷 Photographier la plaque
+      <input
+        id="ocrInput"
+        type="file"
+        accept="image/*"
+        capture="environment"
+        hidden
+        onchange="performOCR(event)"
+      >
+    </label>
+
+    <div id="ocrStatus"></div>
+
+    <div id="ocrResult" class="hidden">
+
+      <label>Immatriculation détectée</label>
+
+      <input
+        id="ocrPlate"
+        class="plate"
+        maxlength="11"
+        oninput="formatPlateInput(this)"
+      >
+
+      <button class="primary" onclick="createVehicleFromOCR()">
+        📁 Créer le dossier
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- MODAL PLAQUE MANUELLE -->
+<div id="plateModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <button class="close" onclick="closePlateModal()">×</button>
+
+    <h2>Nouvelle immatriculation</h2>
 
     <input
-      id="photoVehicule"
-      type="file"
-      accept="image/*"
-      capture="environment"
-      class="hidden"
-      onchange="ajouterPhoto(event)"
+      id="manualPlate"
+      class="plate"
+      placeholder="AB-123-CD"
+      maxlength="11"
+      oninput="formatPlateInput(this)"
     >
 
-    <button
-      class="secondary"
-      type="button"
-      onclick="preparerEmail()"
-    >
-      ✉️ Préparer un e-mail
+    <button class="primary" onclick="createVehicleManual()">
+      📁 Créer le dossier
     </button>
 
-    <div id="photosVehicule" class="photos"></div>
+  </div>
 
-    <button
-      class="danger"
-      type="button"
-      onclick="fermerDossier()"
+</div>
+
+
+<!-- MODAL EMAIL -->
+<div id="emailModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <button class="close" onclick="closeEmailPanel()">×</button>
+
+    <h2>Envoyer par e-mail</h2>
+
+    <label>Destinataire</label>
+
+    <input
+      id="emailTo"
+      type="email"
+      placeholder="adresse@exemple.fr"
     >
-      Fermer le dossier
+
+    <label>Objet</label>
+
+    <input id="emailSubject">
+
+    <label>Message</label>
+
+    <textarea id="emailMessage"></textarea>
+
+    <div class="warning">
+      Le bouton ci-dessous ouvre le partage du téléphone avec les photos.
+      Si Mail Orange est installé et disponible comme application de partage,
+      sélectionne-le pour envoyer directement depuis ton compte Orange.
+    </div>
+
+    <button class="orange" onclick="sendWithOrange()">
+      🟠 Ouvrir avec Orange Mail
+    </button>
+
+    <button class="secondary" onclick="copyEmailText()">
+      📋 Copier le message
+    </button>
+
+    <button class="secondary" onclick="openOrangeWebmail()">
+      🌐 Ouvrir Mail Orange dans Safari
     </button>
 
   </div>
@@ -329,116 +512,660 @@
 <script>
 
 /* =========================================================
-   CONFIGURATION OCR.SPACE
-   ========================================================= */
+   CONFIGURATION
+========================================================= */
 
 const OCR_API_KEY = "K89493204488957";
 
-const OCR_URL = "https://api.ocr.space/parse/image";
+const STORAGE_KEY = "atelier_carrosserie_sebie_v2";
+
+let vehicles = [];
+let currentVehicleId = null;
 
 
 /* =========================================================
-   VARIABLES
-   ========================================================= */
+   CHARGEMENT
+========================================================= */
 
-let vehicules = JSON.parse(
-  localStorage.getItem("atelierCarrosserieVehicules") || "[]"
-);
+function loadVehicles() {
 
-let vehiculeActuelId = null;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
 
+    if (saved) {
+      vehicles = JSON.parse(saved);
+    } else {
+      vehicles = [];
+    }
 
-/* =========================================================
-   NETTOYAGE IMMATRICULATION
-   ========================================================= */
-
-function nettoyerImmatriculation(texte) {
-
-  if (!texte) {
-    return "";
+  } catch (error) {
+    console.error(error);
+    vehicles = [];
   }
 
-  return texte
+  renderRecentVehicles();
+}
+
+function saveVehicles() {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(vehicles)
+  );
+}
+
+
+/* =========================================================
+   OUTILS
+========================================================= */
+
+function generateId() {
+  return Date.now().toString() +
+         Math.random().toString(36).substring(2);
+}
+
+function today() {
+  return new Date().toLocaleDateString("fr-FR");
+}
+
+function normalizePlate(value) {
+
+  return value
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, "")
-    .trim();
+    .slice(0, 9);
 }
 
+function formatPlate(value) {
 
-/* =========================================================
-   FORMATAGE IMMATRICULATION
-   ========================================================= */
+  const clean = normalizePlate(value);
 
-function formatImmatriculation(texte) {
-
-  const propre = nettoyerImmatriculation(texte);
-
-  /*
-    Format français classique :
-    AB123CD
-    devient :
-    AB 123 CD
-  */
-
-  if (/^[A-Z]{2}\d{3}[A-Z]{2}$/.test(propre)) {
-
-    return propre.substring(0,2)
-      + " "
-      + propre.substring(2,5)
-      + " "
-      + propre.substring(5,7);
+  if (clean.length <= 2) {
+    return clean;
   }
 
-  return propre;
+  if (clean.length <= 5) {
+    return clean.slice(0,2) + "-" + clean.slice(2);
+  }
+
+  return clean.slice(0,2) +
+    "-" +
+    clean.slice(2,5) +
+    "-" +
+    clean.slice(5,7);
+}
+
+function formatPlateInput(input) {
+  input.value = formatPlate(input.value);
 }
 
 
 /* =========================================================
-   OUVRIR LE SCANNER
-   ========================================================= */
+   ACCUEIL
+========================================================= */
 
-function ouvrirScanner() {
+function showHome() {
 
-  const input = document.getElementById("photoOCR");
+  document.getElementById("home")
+    .classList.remove("hidden");
 
-  input.value = "";
+  document.getElementById("folder")
+    .classList.add("hidden");
 
-  input.click();
+  currentVehicleId = null;
+
+  renderRecentVehicles();
+  searchVehicles();
+}
+
+function openFolder(id) {
+
+  const vehicle = vehicles.find(v => v.id === id);
+
+  if (!vehicle) return;
+
+  currentVehicleId = id;
+
+  document.getElementById("home")
+    .classList.add("hidden");
+
+  document.getElementById("folder")
+    .classList.remove("hidden");
+
+  document.getElementById("folderTitle")
+    .textContent = vehicle.plate;
+
+  document.getElementById("folderInfo").innerHTML = `
+    <div class="vehicle">
+      <div class="vehicle-title">${vehicle.plate}</div>
+      <div class="vehicle-info">
+        Dossier créé le ${vehicle.date}
+      </div>
+      <div class="vehicle-info">
+        ${vehicle.photos.length} photo(s)
+      </div>
+    </div>
+  `;
+
+  renderPhotos();
 }
 
 
 /* =========================================================
-   SCANNER IMMATRICULATION AVEC OCR.SPACE
-   ========================================================= */
+   DOSSIERS
+========================================================= */
 
-async function scannerImmatriculation(event) {
+function createVehicle(plate) {
 
-  const file = event.target.files[0];
+  plate = formatPlate(plate);
 
-  if (!file) {
+  if (!plate || plate.length < 7) {
+    alert("Veuillez saisir une immatriculation valide.");
     return;
   }
 
-  afficherOCRStatus(
-    "📷 Analyse de la photo en cours...",
-    "info"
+  const existing = vehicles.find(
+    v => v.plate === plate
   );
+
+  if (existing) {
+
+    currentVehicleId = existing.id;
+
+    closeScanner();
+    closePlateModal();
+
+    openFolder(existing.id);
+
+    return;
+  }
+
+  const vehicle = {
+
+    id: generateId(),
+
+    plate: plate,
+
+    date: today(),
+
+    photos: []
+
+  };
+
+  vehicles.unshift(vehicle);
+
+  saveVehicles();
+
+  closeScanner();
+  closePlateModal();
+
+  openFolder(vehicle.id);
+}
+
+
+function createVehicleManual() {
+
+  const value =
+    document.getElementById("manualPlate").value;
+
+  createVehicle(value);
+}
+
+
+function createVehicleFromOCR() {
+
+  const value =
+    document.getElementById("ocrPlate").value;
+
+  createVehicle(value);
+}
+
+
+/* =========================================================
+   DOSSIERS RÉCENTS
+========================================================= */
+
+function renderRecentVehicles() {
+
+  const container =
+    document.getElementById("recentVehicles");
+
+  if (!vehicles.length) {
+
+    container.innerHTML = `
+      <p class="small">
+        Aucun dossier pour le moment.
+      </p>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    vehicles.slice(0, 20).map(vehicle => `
+
+      <div
+        class="vehicle"
+        onclick="openFolder('${vehicle.id}')"
+      >
+
+        <div class="vehicle-title">
+          ${vehicle.plate}
+        </div>
+
+        <div class="vehicle-info">
+          ${vehicle.date}
+          ·
+          ${vehicle.photos.length} photo(s)
+        </div>
+
+      </div>
+
+    `).join("");
+}
+
+
+/* =========================================================
+   RECHERCHE
+========================================================= */
+
+function searchVehicles() {
+
+  const value =
+    document.getElementById("searchInput")
+      .value
+      .toUpperCase()
+      .trim();
+
+  const container =
+    document.getElementById("searchResults");
+
+  if (!value) {
+
+    container.innerHTML = "";
+
+    return;
+  }
+
+  const results =
+    vehicles.filter(v =>
+      v.plate.includes(value)
+    );
+
+  if (!results.length) {
+
+    container.innerHTML = `
+      <p class="small">
+        Aucun dossier trouvé.
+      </p>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    results.map(vehicle => `
+
+      <div
+        class="vehicle"
+        onclick="openFolder('${vehicle.id}')"
+      >
+
+        <div class="vehicle-title">
+          ${vehicle.plate}
+        </div>
+
+        <div class="vehicle-info">
+          ${vehicle.date}
+          ·
+          ${vehicle.photos.length} photo(s)
+        </div>
+
+      </div>
+
+    `).join("");
+}
+
+
+/* =========================================================
+   PHOTO
+========================================================= */
+
+function addPhotos(event) {
+
+  const files = Array.from(event.target.files);
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  if (!vehicle) return;
+
+  files.forEach(file => {
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+      vehicle.photos.push({
+
+        id: generateId(),
+
+        data: e.target.result,
+
+        comment: "",
+
+        date: new Date().toISOString()
+
+      });
+
+      saveVehicles();
+
+      renderPhotos();
+
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+  event.target.value = "";
+}
+
+
+function renderPhotos() {
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  const grid =
+    document.getElementById("photoGrid");
+
+  if (!vehicle || !vehicle.photos.length) {
+
+    grid.innerHTML = `
+      <p class="small">
+        Aucune photo dans ce dossier.
+      </p>
+    `;
+
+    return;
+  }
+
+  grid.innerHTML =
+    vehicle.photos.map(photo => `
+
+      <div class="photo">
+
+        <img src="${photo.data}">
+
+        <div class="photo-actions">
+
+          <button
+            onclick="event.stopPropagation();
+            addPhotoComment('${photo.id}')"
+          >
+            💬
+          </button>
+
+          <button
+            onclick="event.stopPropagation();
+            deletePhoto('${photo.id}')"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+        ${
+          photo.comment
+          ?
+          `<div class="comment">
+             ${escapeHtml(photo.comment)}
+           </div>`
+          :
+          ""
+        }
+
+      </div>
+
+    `).join("");
+}
+
+
+function deletePhoto(photoId) {
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  if (!vehicle) return;
+
+  if (!confirm("Supprimer cette photo ?")) {
+    return;
+  }
+
+  vehicle.photos =
+    vehicle.photos.filter(
+      p => p.id !== photoId
+    );
+
+  saveVehicles();
+
+  renderPhotos();
+}
+
+
+function addPhotoComment(photoId) {
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  const photo =
+    vehicle.photos.find(
+      p => p.id === photoId
+    );
+
+  if (!photo) return;
+
+  const comment =
+    prompt(
+      "Commentaire pour cette photo :",
+      photo.comment || ""
+    );
+
+  if (comment === null) return;
+
+  photo.comment = comment;
+
+  saveVehicles();
+
+  renderPhotos();
+}
+
+
+function escapeHtml(text) {
+
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   DICTÉE IMMATRICULATION
+========================================================= */
+
+function startPlateDictation() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    alert(
+      "La dictée vocale n'est pas disponible dans ce navigateur."
+    );
+
+    return;
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang = "fr-FR";
+
+  recognition.continuous = false;
+
+  recognition.interimResults = false;
+
+  recognition.onresult = function(event) {
+
+    const text =
+      event.results[0][0].transcript;
+
+    const cleaned =
+      convertSpokenPlate(text);
+
+    document.getElementById("manualPlate").value =
+      cleaned;
+
+    document.getElementById("plateModal")
+      .classList.remove("hidden");
+  };
+
+  recognition.onerror = function() {
+
+    alert(
+      "La dictée n'a pas fonctionné. Vous pouvez saisir la plaque manuellement."
+    );
+
+  };
+
+  recognition.start();
+}
+
+
+function convertSpokenPlate(text) {
+
+  let value =
+    text
+      .toUpperCase()
+      .replaceAll(" ", "");
+
+  const replacements = {
+
+    "UN": "1",
+    "DEUX": "2",
+    "TROIS": "3",
+    "QUATRE": "4",
+    "CINQ": "5",
+    "SIX": "6",
+    "SEPT": "7",
+    "HUIT": "8",
+    "NEUF": "9",
+    "ZÉRO": "0",
+    "ZERO": "0"
+
+  };
+
+  Object.keys(replacements).forEach(word => {
+
+    value =
+      value.replaceAll(
+        word,
+        replacements[word]
+      );
+
+  });
+
+  value =
+    value.replace(
+      /[^A-Z0-9]/g,
+      ""
+    );
+
+  return formatPlate(value);
+}
+
+
+/* =========================================================
+   MODALE PLAQUE
+========================================================= */
+
+function openPlateManual() {
+
+  document.getElementById("manualPlate").value = "";
+
+  document.getElementById("plateModal")
+    .classList.remove("hidden");
+
+  setTimeout(() => {
+
+    document.getElementById("manualPlate")
+      .focus();
+
+  }, 200);
+
+}
+
+
+function closePlateModal() {
+
+  document.getElementById("plateModal")
+    .classList.add("hidden");
+}
+
+
+/* =========================================================
+   OCR SPACE
+========================================================= */
+
+function openScanner() {
+
+  document.getElementById("scannerModal")
+    .classList.remove("hidden");
+
+  document.getElementById("ocrStatus")
+    .innerHTML = "";
+
+  document.getElementById("ocrResult")
+    .classList.add("hidden");
+}
+
+
+function closeScanner() {
+
+  document.getElementById("scannerModal")
+    .classList.add("hidden");
+}
+
+
+async function performOCR(event) {
+
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+  const status =
+    document.getElementById("ocrStatus");
+
+  status.innerHTML = `
+    <div class="status">
+      🔎 Lecture de la plaque en cours...
+    </div>
+  `;
 
   try {
 
-    /*
-      On limite la taille de l'image.
-      Cela permet d'envoyer plus rapidement la photo.
-    */
-
-    const image = await redimensionnerImage(file);
-
-    const formData = new FormData();
+    const formData =
+      new FormData();
 
     formData.append(
-      "file",
-      image,
-      "plaque.jpg"
+      "apikey",
+      OCR_API_KEY
     );
 
     formData.append(
@@ -451,964 +1178,421 @@ async function scannerImmatriculation(event) {
       "false"
     );
 
-    /*
-      Engine 2 est particulièrement adapté
-      aux caractères alphanumériques.
-    */
-
     formData.append(
       "OCREngine",
       "2"
     );
 
-
-    const response = await fetch(
-      OCR_URL,
-      {
-        method: "POST",
-
-        headers: {
-          "apikey": OCR_API_KEY
-        },
-
-        body: formData
-      }
+    formData.append(
+      "file",
+      file
     );
 
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Erreur réseau OCR : " + response.status
+    const response =
+      await fetch(
+        "https://api.ocr.space/parse/image",
+        {
+          method: "POST",
+          body: formData
+        }
       );
-    }
 
+    const data =
+      await response.json();
 
-    const data = await response.json();
-
-
-    console.log(
-      "Réponse OCR.space :",
-      data
-    );
-
+    let text = "";
 
     if (
-      data.IsErroredOnProcessing ||
-      !data.ParsedResults ||
-      data.ParsedResults.length === 0
+      data.ParsedResults &&
+      data.ParsedResults.length
     ) {
 
-      let message = "Impossible de lire l'immatriculation.";
-
-      if (data.ErrorMessage) {
-
-        if (Array.isArray(data.ErrorMessage)) {
-          message += " " + data.ErrorMessage.join(" ");
-        } else {
-          message += " " + data.ErrorMessage;
-        }
-
-      }
-
-      throw new Error(message);
-    }
-
-
-    /*
-      Récupération de tout le texte détecté.
-    */
-
-    let texteOCR = "";
-
-    data.ParsedResults.forEach(result => {
-
-      if (result.ParsedText) {
-        texteOCR += " " + result.ParsedText;
-      }
-
-    });
-
-
-    console.log(
-      "Texte OCR :",
-      texteOCR
-    );
-
-
-    /*
-      Recherche d'une plaque française.
-    */
-
-    const plaque = trouverImmatriculation(texteOCR);
-
-
-    if (!plaque) {
-
-      /*
-        Si le moteur ne retrouve pas exactement
-        le format français, on met quand même
-        le texte nettoyé dans le champ.
-      */
-
-      const secours = nettoyerImmatriculation(texteOCR);
-
-      if (secours.length >= 5) {
-
-        document.getElementById(
-          "immatriculation"
-        ).value = formatImmatriculation(secours);
-
-        afficherOCRStatus(
-          "⚠️ Texte détecté. Vérifie l'immatriculation avant de créer le dossier.",
-          "info"
-        );
-
-        return;
-      }
-
-
-      throw new Error(
-        "Aucune immatriculation lisible n'a été trouvée."
-      );
-    }
-
-
-    document.getElementById(
-      "immatriculation"
-    ).value = formatImmatriculation(plaque);
-
-
-    afficherOCRStatus(
-      "✅ Immatriculation détectée : " +
-      formatImmatriculation(plaque),
-      "success"
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    afficherOCRStatus(
-      "❌ " + error.message,
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   TROUVER UNE IMMATRICULATION FRANÇAISE
-   ========================================================= */
-
-function trouverImmatriculation(texte) {
-
-  if (!texte) {
-    return null;
-  }
-
-  let propre = texte
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "");
-
-
-  /*
-    Format SIV français :
-    AA123AA
-  */
-
-  let match = propre.match(
-    /[A-Z]{2}\d{3}[A-Z]{2}/
-  );
-
-  if (match) {
-    return match[0];
-  }
-
-
-  /*
-    Deuxième tentative :
-    OCR peut parfois lire un caractère
-    avec un espace ou un retour à la ligne.
-  */
-
-  const candidats = texte
-    .toUpperCase()
-    .split(/\s+/)
-    .map(x =>
-      x.replace(/[^A-Z0-9]/g, "")
-    )
-    .filter(x => x.length > 0);
-
-
-  /*
-    On regarde les combinaisons de morceaux.
-  */
-
-  for (let i = 0; i < candidats.length; i++) {
-
-    for (
-      let j = i;
-      j < Math.min(i + 3, candidats.length);
-      j++
-    ) {
-
-      const combinaison =
-        candidats
-          .slice(i, j + 1)
-          .join("");
-
-      const resultat =
-        combinaison.match(
-          /[A-Z]{2}\d{3}[A-Z]{2}/
-        );
-
-      if (resultat) {
-        return resultat[0];
-      }
+      text =
+        data.ParsedResults
+          .map(r => r.ParsedText || "")
+          .join(" ");
 
     }
 
-  }
+    const plate =
+      findPlate(text);
+
+    if (!plate) {
+
+      status.innerHTML = `
+        <div class="warning">
+          ⚠️ Je n'ai pas réussi à reconnaître
+          automatiquement la plaque.
+          Vérifie la photo ou saisis-la manuellement.
+        </div>
+      `;
 
-
-  return null;
-}
-
-
-/* =========================================================
-   REDIMENSIONNER IMAGE
-   ========================================================= */
-
-function redimensionnerImage(file) {
-
-  return new Promise((resolve, reject) => {
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-
-      const img = new Image();
-
-      img.onload = function() {
-
-        const MAX = 1600;
-
-        let width = img.width;
-        let height = img.height;
-
-
-        if (width > MAX || height > MAX) {
-
-          if (width > height) {
-
-            height =
-              Math.round(
-                height * MAX / width
-              );
-
-            width = MAX;
-
-          } else {
-
-            width =
-              Math.round(
-                width * MAX / height
-              );
-
-            height = MAX;
-          }
-
-        }
-
-
-        const canvas =
-          document.createElement("canvas");
-
-        canvas.width = width;
-        canvas.height = height;
-
-
-        const ctx =
-          canvas.getContext("2d");
-
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          width,
-          height
-        );
-
-
-        canvas.toBlob(
-          blob => {
-
-            if (!blob) {
-
-              reject(
-                new Error(
-                  "Impossible de préparer la photo."
-                )
-              );
-
-              return;
-            }
-
-            resolve(blob);
-
-          },
-          "image/jpeg",
-          0.90
-        );
-
-      };
-
-
-      img.onerror = function() {
-
-        reject(
-          new Error(
-            "Impossible de lire la photo."
-          )
-        );
-
-      };
-
-
-      img.src = e.target.result;
-
-    };
-
-
-    reader.onerror = function() {
-
-      reject(
-        new Error(
-          "Impossible de charger la photo."
-        )
-      );
-
-    };
-
-
-    reader.readAsDataURL(file);
-
-  });
-
-}
-
-
-/* =========================================================
-   MESSAGE OCR
-   ========================================================= */
-
-function afficherOCRStatus(message, type) {
-
-  const element =
-    document.getElementById("ocrStatus");
-
-  element.textContent = message;
-
-  element.className =
-    "status " + type;
-
-}
-
-
-/* =========================================================
-   CRÉER VÉHICULE
-   ========================================================= */
-
-function creerVehicule() {
-
-  const input =
-    document.getElementById("immatriculation");
-
-  const valeur =
-    nettoyerImmatriculation(input.value);
-
-
-  if (!valeur) {
-
-    alert(
-      "Veuillez saisir ou scanner une immatriculation."
-    );
-
-    return;
-  }
-
-
-  const existe =
-    vehicules.find(
-      v => v.immatriculation === valeur
-    );
-
-
-  if (existe) {
-
-    alert(
-      "Un dossier existe déjà pour cette immatriculation."
-    );
-
-    ouvrirDossier(existe.id);
-
-    return;
-  }
-
-
-  const vehicule = {
-
-    id: Date.now(),
-
-    immatriculation: valeur,
-
-    photos: [],
-
-    dateCreation:
-      new Date().toISOString()
-
-  };
-
-
-  vehicules.push(vehicule);
-
-  sauvegarder();
-
-
-  input.value = "";
-
-  afficherOCRStatus(
-    "",
-    ""
-  );
-
-
-  afficherVehicules();
-
-  ouvrirDossier(vehicule.id);
-
-}
-
-
-/* =========================================================
-   SAUVEGARDER
-   ========================================================= */
-
-function sauvegarder() {
-
-  localStorage.setItem(
-    "atelierCarrosserieVehicules",
-    JSON.stringify(vehicules)
-  );
-
-}
-
-
-/* =========================================================
-   AFFICHER LES DOSSIERS
-   ========================================================= */
-
-function afficherVehicules() {
-
-  const container =
-    document.getElementById(
-      "listeVehicules"
-    );
-
-
-  container.innerHTML = "";
-
-
-  if (vehicules.length === 0) {
-
-    container.innerHTML =
-      '<div class="empty">Aucun dossier pour le moment.</div>';
-
-    return;
-  }
-
-
-  /*
-    Plus récent en premier.
-  */
-
-  const liste =
-    [...vehicules].reverse();
-
-
-  liste.forEach(vehicule => {
-
-    const div =
-      document.createElement("div");
-
-    div.className = "vehicle";
-
-
-    const titre =
-      document.createElement("div");
-
-    titre.className =
-      "vehicle-title";
-
-    titre.textContent =
-      formatImmatriculation(
-        vehicule.immatriculation
-      );
-
-
-    const infos =
-      document.createElement("div");
-
-    infos.className =
-      "small";
-
-    infos.textContent =
-      vehicule.photos.length +
-      " photo(s)";
-
-
-    const boutons =
-      document.createElement("div");
-
-    boutons.className =
-      "vehicle-buttons";
-
-
-    const ouvrir =
-      document.createElement("button");
-
-    ouvrir.className =
-      "primary";
-
-    ouvrir.textContent =
-      "Ouvrir";
-
-    ouvrir.onclick = function() {
-
-      ouvrirDossier(vehicule.id);
-
-    };
-
-
-    const supprimer =
-      document.createElement("button");
-
-    supprimer.className =
-      "danger";
-
-    supprimer.textContent =
-      "Supprimer";
-
-    supprimer.onclick = function() {
-
-      supprimerVehicule(vehicule.id);
-
-    };
-
-
-    boutons.appendChild(ouvrir);
-
-    boutons.appendChild(supprimer);
-
-
-    div.appendChild(titre);
-
-    div.appendChild(infos);
-
-    div.appendChild(boutons);
-
-
-    container.appendChild(div);
-
-  });
-
-}
-
-
-/* =========================================================
-   OUVRIR DOSSIER
-   ========================================================= */
-
-function ouvrirDossier(id) {
-
-  const vehicule =
-    vehicules.find(
-      v => v.id === id
-    );
-
-
-  if (!vehicule) {
-    return;
-  }
-
-
-  vehiculeActuelId =
-    id;
-
-
-  document.getElementById(
-    "dossierActuel"
-  ).classList.remove("hidden");
-
-
-  document.getElementById(
-    "titreDossier"
-  ).textContent =
-    "Dossier : " +
-    formatImmatriculation(
-      vehicule.immatriculation
-    );
-
-
-  afficherPhotos();
-
-
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* =========================================================
-   FERMER DOSSIER
-   ========================================================= */
-
-function fermerDossier() {
-
-  vehiculeActuelId =
-    null;
-
-  document.getElementById(
-    "dossierActuel"
-  ).classList.add("hidden");
-
-}
-
-
-/* =========================================================
-   PRENDRE PHOTO
-   ========================================================= */
-
-function prendrePhoto() {
-
-  if (!vehiculeActuelId) {
-    return;
-  }
-
-  const input =
-    document.getElementById(
-      "photoVehicule"
-    );
-
-  input.value = "";
-
-  input.click();
-
-}
-
-
-/* =========================================================
-   AJOUTER PHOTO
-   ========================================================= */
-
-function ajouterPhoto(event) {
-
-  const file =
-    event.target.files[0];
-
-
-  if (!file || !vehiculeActuelId) {
-    return;
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload = function(e) {
-
-    const vehicule =
-      vehicules.find(
-        v => v.id === vehiculeActuelId
-      );
-
-
-    if (!vehicule) {
       return;
     }
 
+    document.getElementById("ocrPlate")
+      .value = plate;
 
-    vehicule.photos.push(
-      e.target.result
+    document.getElementById("ocrResult")
+      .classList.remove("hidden");
+
+    status.innerHTML = `
+      <div class="status">
+        ✅ Plaque reconnue
+      </div>
+    `;
+
+  } catch(error) {
+
+    console.error(error);
+
+    status.innerHTML = `
+      <div class="warning">
+        ❌ Erreur pendant la reconnaissance.
+        Tu peux saisir la plaque manuellement.
+      </div>
+    `;
+
+  }
+
+  event.target.value = "";
+}
+
+
+function findPlate(text) {
+
+  const clean =
+    text
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
+
+  /*
+    Recherche classique d'une plaque française :
+    2 lettres + 3 chiffres + 2 lettres
+  */
+
+  let match =
+    clean.match(
+      /[A-Z]{2}[0-9]{3}[A-Z]{2}/
     );
 
+  if (match) {
 
-    sauvegarder();
+    return formatPlate(match[0]);
 
-    afficherPhotos();
+  }
 
-    afficherVehicules();
+  /*
+    Quelques variantes OCR fréquentes
+  */
+
+  const letters =
+    clean.match(
+      /[A-Z]{2}/
+    );
+
+  const numbers =
+    clean.match(
+      /[0-9]{3}/
+    );
+
+  const endLetters =
+    clean.match(
+      /[A-Z]{2}$/
+    );
+
+  if (
+    letters &&
+    numbers &&
+    endLetters
+  ) {
+
+    return formatPlate(
+      letters[0] +
+      numbers[0] +
+      endLetters[0]
+    );
+
+  }
+
+  return "";
+}
+
+
+/* =========================================================
+   EMAIL
+========================================================= */
+
+function openEmailPanel() {
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  if (!vehicle) return;
+
+  document.getElementById("emailSubject")
+    .value =
+    "Photos véhicule " + vehicle.plate;
+
+  document.getElementById("emailMessage")
+    .value =
+`Bonjour,
+
+Veuillez trouver ci-joint les photos du véhicule ${vehicle.plate}.
+
+Cordialement,
+
+Atelier Carrosserie Sébie`;
+
+  document.getElementById("emailModal")
+    .classList.remove("hidden");
+}
+
+
+function closeEmailPanel() {
+
+  document.getElementById("emailModal")
+    .classList.add("hidden");
+}
+
+
+/*
+  NOUVELLE MÉTHODE D'ENVOI
+
+  On n'utilise volontairement PLUS :
+
+      mailto:
+
+  car cela passe par l'application mail par défaut
+  configurée sur l'iPhone.
+
+  On utilise le partage natif du téléphone.
+  Cela permet de sélectionner Mail Orange lorsqu'il
+  est proposé par le système.
+*/
+
+async function sendWithOrange() {
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  if (!vehicle) return;
+
+  const to =
+    document.getElementById("emailTo").value.trim();
+
+  const subject =
+    document.getElementById("emailSubject").value;
+
+  const message =
+    document.getElementById("emailMessage").value;
+
+  const files = [];
+
+  /*
+    Transformation des photos en fichiers
+    afin qu'elles puissent être proposées
+    comme pièces jointes dans le partage.
+  */
+
+  for (let i = 0; i < vehicle.photos.length; i++) {
+
+    try {
+
+      const response =
+        await fetch(vehicle.photos[i].data);
+
+      const blob =
+        await response.blob();
+
+      const file =
+        new File(
+          [blob],
+          vehicle.plate +
+          "-" +
+          (i + 1) +
+          ".jpg",
+          {
+            type: blob.type || "image/jpeg"
+          }
+        );
+
+      files.push(file);
+
+    } catch(error) {
+
+      console.error(
+        "Photo impossible à préparer",
+        error
+      );
+
+    }
+  }
+
+  const shareData = {
+
+    title: subject,
+
+    text:
+      (to ? "À : " + to + "\n\n" : "") +
+      message
 
   };
 
+  /*
+    Si le téléphone accepte le partage de fichiers,
+    on ajoute les photos.
+  */
 
-  reader.readAsDataURL(file);
+  if (
+    files.length &&
+    navigator.canShare &&
+    navigator.canShare({ files })
+  ) {
 
-}
+    shareData.files = files;
 
-
-/* =========================================================
-   AFFICHER PHOTOS
-   ========================================================= */
-
-function afficherPhotos() {
-
-  const container =
-    document.getElementById(
-      "photosVehicule"
-    );
-
-
-  container.innerHTML = "";
-
-
-  const vehicule =
-    vehicules.find(
-      v => v.id === vehiculeActuelId
-    );
-
-
-  if (!vehicule) {
-    return;
   }
 
+  try {
 
-  vehicule.photos.forEach(
-    (photo, index) => {
+    if (
+      navigator.share &&
+      (
+        !files.length ||
+        !navigator.canShare ||
+        navigator.canShare({ files })
+      )
+    ) {
 
-      const wrapper =
-        document.createElement("div");
+      await navigator.share(shareData);
 
-
-      const img =
-        document.createElement("img");
-
-      img.src =
-        photo;
-
-      img.alt =
-        "Photo véhicule";
-
-
-      img.onclick =
-        function() {
-
-          supprimerPhoto(index);
-
-        };
-
-
-      wrapper.appendChild(img);
-
-      container.appendChild(wrapper);
+      return;
 
     }
-  );
 
+    /*
+      Si le partage de fichiers n'est pas disponible,
+      on ouvre directement le Mail Orange web.
+    */
 
-  if (vehicule.photos.length > 0) {
+    openOrangeWebmail();
 
-    const info =
-      document.createElement("div");
+  } catch(error) {
 
-    info.className =
-      "small";
+    /*
+      L'utilisateur peut fermer le menu de partage.
+      Dans ce cas on ne montre pas une fausse erreur.
+    */
 
-    info.style.gridColumn =
-      "1 / -1";
+    if (
+      error &&
+      error.name !== "AbortError"
+    ) {
 
-    info.textContent =
-      "Appuie sur une photo pour la supprimer.";
+      console.error(error);
 
-    container.appendChild(info);
+      openOrangeWebmail();
+
+    }
 
   }
+}
+
+
+/* =========================================================
+   ORANGE MAIL WEB
+========================================================= */
+
+function openOrangeWebmail() {
+
+  window.open(
+    "https://mail.orange.fr/",
+    "_blank"
+  );
 
 }
 
 
 /* =========================================================
-   SUPPRIMER PHOTO
-   ========================================================= */
+   COPIER LE MESSAGE
+========================================================= */
 
-function supprimerPhoto(index) {
+async function copyEmailText() {
 
-  if (!vehiculeActuelId) {
-    return;
+  const to =
+    document.getElementById("emailTo").value;
+
+  const subject =
+    document.getElementById("emailSubject").value;
+
+  const message =
+    document.getElementById("emailMessage").value;
+
+  const text =
+`À : ${to}
+
+Objet : ${subject}
+
+${message}`;
+
+  try {
+
+    await navigator.clipboard.writeText(text);
+
+    alert(
+      "Le destinataire, l'objet et le message ont été copiés."
+    );
+
+  } catch(error) {
+
+    alert(
+      "Impossible de copier automatiquement. Sélectionne le texte manuellement."
+    );
+
   }
+}
 
+
+/* =========================================================
+   SUPPRESSION DOSSIER
+========================================================= */
+
+function deleteCurrentVehicle() {
+
+  const vehicle =
+    vehicles.find(v => v.id === currentVehicleId);
+
+  if (!vehicle) return;
 
   if (
     !confirm(
-      "Supprimer cette photo ?"
+      "Supprimer définitivement le dossier " +
+      vehicle.plate +
+      " et toutes ses photos ?"
     )
   ) {
+
     return;
+
   }
 
-
-  const vehicule =
-    vehicules.find(
-      v => v.id === vehiculeActuelId
+  vehicles =
+    vehicles.filter(
+      v => v.id !== currentVehicleId
     );
 
+  saveVehicles();
 
-  if (!vehicule) {
-    return;
-  }
-
-
-  vehicule.photos.splice(
-    index,
-    1
-  );
-
-
-  sauvegarder();
-
-  afficherPhotos();
-
-  afficherVehicules();
-
-}
-
-
-/* =========================================================
-   SUPPRIMER VÉHICULE
-   ========================================================= */
-
-function supprimerVehicule(id) {
-
-  const vehicule =
-    vehicules.find(
-      v => v.id === id
-    );
-
-
-  if (!vehicule) {
-    return;
-  }
-
-
-  const ok =
-    confirm(
-      "Supprimer définitivement le dossier " +
-      formatImmatriculation(
-        vehicule.immatriculation
-      ) +
-      " ?"
-    );
-
-
-  if (!ok) {
-    return;
-  }
-
-
-  vehicules =
-    vehicules.filter(
-      v => v.id !== id
-    );
-
-
-  sauvegarder();
-
-  afficherVehicules();
-
-
-  if (vehiculeActuelId === id) {
-    fermerDossier();
-  }
-
-}
-
-
-/* =========================================================
-   PRÉPARER EMAIL
-   ========================================================= */
-
-function preparerEmail() {
-
-  const vehicule =
-    vehicules.find(
-      v => v.id === vehiculeActuelId
-    );
-
-
-  if (!vehicule) {
-    return;
-  }
-
-
-  const immat =
-    formatImmatriculation(
-      vehicule.immatriculation
-    );
-
-
-  const sujet =
-    "Dossier véhicule " + immat;
-
-
-  const corps =
-    "Bonjour,%0D%0A%0D%0A" +
-    "Voici le dossier du véhicule " +
-    immat +
-    ".%0D%0A%0D%0A" +
-    "Nombre de photos : " +
-    vehicule.photos.length +
-    "%0D%0A%0D%0A" +
-    "Atelier Carrosserie Sébie";
-
-
-  window.location.href =
-    "mailto:?subject=" +
-    encodeURIComponent(sujet) +
-    "&body=" +
-    corps;
-
+  showHome();
 }
 
 
 /* =========================================================
    INITIALISATION
-   ========================================================= */
+========================================================= */
 
-afficherVehicules();
-
-
-/* =========================================================
-   FORMATAGE AUTOMATIQUE DU CHAMP
-   ========================================================= */
-
-document
-  .getElementById("immatriculation")
-  .addEventListener(
-    "input",
-    function() {
-
-      this.value =
-        this.value.toUpperCase();
-
-    }
-  );
+loadVehicles();
 
 </script>
 
